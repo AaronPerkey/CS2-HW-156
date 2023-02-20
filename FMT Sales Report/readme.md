@@ -5,11 +5,4 @@ Contact info.
 |Name  |      Emma Jones        |      Aaron Perkey      |
 | ---- | ---------------------- | ---------------------- |
 |NU ID |       37093233         |       18955117         |
-| ---- | ---------------------- | ---------------------- |
 |Email | emurosejones@gmail.com | aarontperkey@gmail.com |
-
-
-| Syntax      | Description |
-| ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
