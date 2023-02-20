@@ -7,3 +7,9 @@ Contact info.
 |NU ID |       37093233         |       18955117         |
 | ____ | ______________________ | ______________________ |
 |Email | emurosejones@gmail.com | aarontperkey@gmail.com |
+
+
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
