@@ -1,8 +1,9 @@
 package com.fmt;
 /**
  * 
- * Models the location of a store or person.
- * 
+ * Models the location of a store or person
+ * within the company's system.
+ *
  * @author aaron, emma
  *
  */
