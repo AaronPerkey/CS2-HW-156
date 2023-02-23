@@ -1,7 +1,7 @@
 package com.fmt;
 /**
  * 
- * This models the individual store information
+ * Models the individual store information
  * in the company's system.
  * 
  * @author aaron
