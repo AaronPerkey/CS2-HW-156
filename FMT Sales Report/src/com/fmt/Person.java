@@ -1,7 +1,7 @@
 package com.fmt;
 /**
  * 
- * Models a individual person.
+ * Models an individual customer and their information.
  * 
  * @author aaron, emma
  *
