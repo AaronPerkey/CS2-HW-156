@@ -1,7 +1,8 @@
 package com.fmt;
 /**
  * 
- * Models the name of the person.
+ * Models the name of both customers
+ * and managers in the company's system.
  * 
  * @author aaron, emma
  *
