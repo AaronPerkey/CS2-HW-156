@@ -1,7 +1,7 @@
 package com.fmt;
 /**
  * 
- * Models the information of the
+ * Models the information of
  * each item in the company's system.
  * 
  * @author aaron, emma
