@@ -1,0 +1,37 @@
+package com.fmt;
+
+public class Product extends Items{
+
+	private final String unit;
+	private final double unitPrice;
+	
+	public Product(String invoiceCode, String itemsQRCode, String cost, String rent, double quantity,
+			String hoursBilled, String itemsQRCode2, String typeOfSale, String name, String unit, double unitPrice) {
+		super(invoiceCode, itemsQRCode, cost, rent, quantity, hoursBilled, itemsQRCode2, typeOfSale, name);
+		this.unit = unit;
+		this.unitPrice = unitPrice;
+	}
+	
+	public String getUnit() {
+		return unit;
+	}
+	public double getunitPrice() {
+		return unitPrice;
+	}
+	
+	public double getSubtotal() {
+		double subtotal = unitPrice * getQuantity();
+		return subtotal;
+	}
+	
+	public double getTax() {
+		double tax =  0.0345 * getSubtotal();
+		return tax;
+	}
+	
+	public double getTotal() {
+		double total = getTax() + getSubtotal();
+		return total;
+	}
+	
+}
