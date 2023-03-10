@@ -1,0 +1,35 @@
+package com.fmt;
+
+/**
+ * mModels how the lease of equipment works.
+ * @param itemsQRCode
+ * @param typeOfSale
+ * @param name
+ * @param model
+ * @param lease
+ */
+
+import java.time.LocalDate;
+public class Lease extends Equipment{
+	private final String lease;
+
+	
+	public Lease(String itemsQRCode, String typeOfSale, String name, String model, String lease) {
+		super(itemsQRCode, typeOfSale, name, model);
+	}
+	Public String gettotal{
+		double subtotal = 0;
+		double tax = 0;
+		double total = 0;
+		if (getTypeOfSale().equals("L")) {
+			Period period = Period.between(getStartDate(), getEndDate());
+			int days = period.getDays();
+		}else if((getCost() <= 10000) || (getCost() < 100000)) {
+			tax = 500;
+		}else if(getCost() > 100000) {
+			tax = 15000;
+}
+			total = tax + subtotal;
+				return total;
+	}
+}
