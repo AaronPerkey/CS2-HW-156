@@ -1,0 +1,57 @@
+[
+  {
+    "storeIdentification": "3c0234",
+    "identification": "fdc267",
+    "location": {
+      "address": "123 Cornhusker Way",
+      "city": "Lincoln",
+      "state": "NE",
+      "zipcode": "68508",
+      "country": "US"
+    }
+  },
+  {
+    "storeIdentification": "9f352c",
+    "identification": "aa887a",
+    "location": {
+      "address": "4242 A Street",
+      "city": "Omaha",
+      "state": "NE",
+      "zipcode": "68117",
+      "country": "US"
+    }
+  },
+  {
+    "storeIdentification": "73668b",
+    "identification": "fdc267",
+    "location": {
+      "address": "RR9901",
+      "city": "Mead",
+      "state": "NE",
+      "zipcode": "61234",
+      "country": "US"
+    }
+  },
+  {
+    "storeIdentification": "96f2cf",
+    "identification": "fdc267",
+    "location": {
+      "address": "452 13th Street",
+      "city": "Hastings",
+      "state": "NE",
+      "zipcode": "68901",
+      "country": "US"
+    }
+  },
+  {
+    "storeIdentification": "25d901",
+    "identification": "aa887a",
+    "location": {
+      "address": "180 Magdeline Plaza",
+      "city": "Wichita",
+      "state": "KS",
+      "zipcode": "67230",
+      "country": "US"
+    }
+  }
+]
