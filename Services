@@ -1,0 +1,31 @@
+package com.fmt;
+
+import invoiceitems,InvoiceItems;
+
+public class Services extends Items{
+	private final double hourlyRate;
+
+	
+
+	public Services(String invoiceCode, String itemsQRCode, String cost, String rent, double quantity,
+			String hoursBilled, String itemsQRCode2, String typeOfSale, String name, double hourlyRate) {
+		super(invoiceCode, itemsQRCode, cost, rent, quantity, hoursBilled, itemsQRCode2, typeOfSale, name);
+		this.hourlyRate = hourlyRate;
+	}
+	
+	public double getHourlyRate() {
+		return hourlyRate;
+	}
+	public double getSubtotal() {
+		double subtotal = hourlyRate * getQuantity();
+		return subtotal;
+	}
+	public double getTax() {
+		double tax = getSubtotal() * 0.0345;
+		return tax;
+	}
+	public double getTotal() {
+		double Total = getSubtotal() + getTax();
+		return Total;
+	}
+}
