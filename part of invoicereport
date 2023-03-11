@@ -1,0 +1,20 @@
+		Map<String, Items> itemsMap = new HashMap<>();
+		Map<String, Store> storeMap = new HashMap<>();
+		Map<String, Person> personMap = new HashMap<>();
+		Map<String, Invoice> invoiceMap = new HashMap<>();
+		List<String> itemsComparator = new ArrayList<>();
+		for(Items it : DataConverter.loadItemsData()) {
+		itemsMap.put(it.getItemsQRCode(), it);
+	}
+		for(Store it : DataConverter.loadStoreData()) {
+		storeMap.put(it.getStoreIdentification(), it);
+	}
+		for(Person it : DataConverter.loadPersonData()) {
+		personMap.put(it.getIdentification(), it);
+	}
+		for(Invoice it : DataConverter.loadInvoiceData()) {
+		invoiceMap.put(it.getInvoiceCode(), it);
+	}
+		for(Items it : DataConverter.loadInvoiceItemsData(DataConverter.loadItemsData())) {
+		itemsComparator.add(it.getItemsQRCode());
+	}
