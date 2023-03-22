@@ -1,0 +1,100 @@
+[
+  {
+    "model": "MegaTract 150HP",
+    "itemsQRCode": "1d4d89",
+    "typeOfSale": "E",
+    "itemName": "Tractor"
+  },
+  {
+    "model": "Husker 2000",
+    "itemsQRCode": "0ec6e9",
+    "typeOfSale": "E",
+    "itemName": "Harvester"
+  },
+  {
+    "model": "Haymaker 400",
+    "itemsQRCode": "740515",
+    "typeOfSale": "E",
+    "itemName": "Baler"
+  },
+  {
+    "model": "BidDoug X25",
+    "itemsQRCode": "3506f6",
+    "typeOfSale": "E",
+    "itemName": "Backhoe"
+  },
+  {
+    "model": "F105",
+    "itemsQRCode": "649f88",
+    "typeOfSale": "E",
+    "itemName": "Truck"
+  },
+  {
+    "unit": "bale",
+    "unitPrice": 500.0,
+    "quantity": 0.0,
+    "itemsQRCode": "342foa3",
+    "typeOfSale": "P",
+    "itemName": "Haybale"
+  },
+  {
+    "unit": "bag",
+    "unitPrice": 50.0,
+    "quantity": 0.0,
+    "itemsQRCode": "3n3k4l2",
+    "typeOfSale": "P",
+    "itemName": "Corn seed"
+  },
+  {
+    "unit": "liter",
+    "unitPrice": 10.25,
+    "quantity": 0.0,
+    "itemsQRCode": "n3453js",
+    "typeOfSale": "P",
+    "itemName": "Fertilizer"
+  },
+  {
+    "unit": "lft",
+    "unitPrice": 8.0,
+    "quantity": 0.0,
+    "itemsQRCode": "l4k32j4",
+    "typeOfSale": "P",
+    "itemName": "Wire fencing"
+  },
+  {
+    "unit": "ton",
+    "unitPrice": 850.0,
+    "quantity": 0.0,
+    "itemsQRCode": "23n4kl2",
+    "typeOfSale": "P",
+    "itemName": "Top soil"
+  },
+  {
+    "hourlyRate": 100.0,
+    "hoursWorked": 0.0,
+    "itemsQRCode": "2334b23",
+    "typeOfSale": "S",
+    "itemName": "Delivery"
+  },
+  {
+    "hourlyRate": 1000.0,
+    "hoursWorked": 0.0,
+    "itemsQRCode": "n43k2l3",
+    "typeOfSale": "S",
+    "itemName": "Plowing"
+  },
+  {
+    "hourlyRate": 25.0,
+    "hoursWorked": 0.0,
+    "itemsQRCode": "432kn2l",
+    "typeOfSale": "S",
+    "itemName": "Tractor Driving Lessons"
+  },
+  {
+    "hourlyRate": 225.5,
+    "hoursWorked": 0.0,
+    "itemsQRCode": "8432941",
+    "typeOfSale": "S",
+    "itemName": "Cattle Vaccination"
+  }
+]
