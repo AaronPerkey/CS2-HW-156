@@ -36,6 +36,9 @@ use LOGIN;
 
 #10. A query to find the subtotal charge of all products in each invoice (hint: you can take an aggregate of a mathematical expression). Do not include taxes.
 
-#11. A query to detect invalid data in invoice as follows. In a single invoice, a particular product should only appear once since any number of units can be consolidated to a single record. For example, an invoice should not have two records for fertilizer; one for 10 liters and another for 25 liters. Instead, it should have a single record for 35 liters. Write a query to find any invoice that includes multiple instances of the same product. If your database design prevents such a situation, you should still write this query (but of course would never expect any results).
+#11. A query to detect invalid data in invoice as follows. In a single invoice, a particular product should only appear once since any number 
+of units can be consolidated to a single record. For example, an invoice should not have two records for fertilizer; one for 10 liters and another 
+for 25 liters. Instead, it should have a single record for 35 liters. Write a query to find any invoice that includes multiple instances of the same product. 
+If your database design prevents such a situation, you should still write this query (but of course would never expect any results).
 
 #12. Write a query to detect a potential instance of fraud where an employee makes a sale to themselves (the same person is the sales person as well as the customer).
