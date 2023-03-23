@@ -2,6 +2,8 @@ package com.fmt;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -178,8 +180,8 @@ public class DataConverter {
 					}
 					Invoice e = null;
 					String tokens[] = line.split(",");
-					List<InvoiceItem> invoiceItems = parseDataFileInvoiceItems("data/InvoiceItems.csv");
-					Comparator<InvoiceItem> byCode = Comparator.comparing(InvoiceItem::getCode);
+					List<Item> invoiceItems = parseDataFileInvoiceItems("data/InvoiceItems.csv");
+					Comparator<Item> byCode = Comparator.comparing(Item::getCode);
 					Collections.sort(invoiceItems, byCode);
 
 					String storeCode = tokens[1];
@@ -203,46 +205,58 @@ public class DataConverter {
 
 					index = 0;
 					List<Item> invoiceCodes = new ArrayList<Item>();
-					while (index > -1) {
-						Item key1 = new Item(tokens[0]);
-						index = Collections.binarySearch(invoiceItems, key1, byCode);
+					
+					
+					for (int i = 0; i > invoiceItems.size(); i++) {
+						if (tokens[0] == invoiceItems.get(i).getInvoiceCode()) {
+							index = i;
+						}
+					
+					
+						
 						// invoice now has a list as its first element, find an invoice, get its class
 						// add it to the list, remove it from invoice items, search again
-						if (index > -1) {
 							if (invoiceItems.get(index).getClass().getSimpleName().equals("Purchase")) {
 
 								Purchase invoiceCode = new Purchase(tokens[0],
-										invoiceItems.get(index).getItemCode(), invoiceItems.get(index).getPrice());
+										invoiceItems.get(index).getItemCode(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getPrice());
 								
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
 							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Lease")) {
 
+								LocalDate startDate = invoiceItems.get(index).getStartDate();
+								LocalDate endDate = invoiceItems.get(index).getEndDate();
+						        
 								Lease invoiceCode = new Lease(tokens[0],
-										invoiceItems.get(index).getItemCode(), invoiceItems.get(index).getFee(),
-										invoiceItems.get(index).getStartDate(), invoiceItems.get(index).getEndDate());
+										invoiceItems.get(index).getItemCode(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getFee(),
+										startDate, endDate);
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
 
 							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Service")) {
 
-								ServiceRecord invoiceCode = new ServiceRecord(tokens[0],
+								Service invoiceCode1 = new Service(tokens[0],
 										invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getHoursBilled());
+										invoiceItems.get(index).getHourlyRate());
+								Service invoiceCode = new Service(invoiceCode1, invoiceItems.get(index).getHoursBilled());
+								
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
 							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Product")) {
 
-								ProductRecord invoiceCode = new ProductRecord(tokens[0],
-										invoiceItems.get(index).getItemCode(), invoiceItems.get(index).getQuantity());
+								Product invoiceCode1 = new Product(tokens[0],
+										invoiceItems.get(index).getItemCode(), invoiceItems.get(index).getUnit(), invoiceItems.get(index).getPrice());
+								Product invoiceCode = new Product(invoiceCode1, invoiceItems.get(index).getQuantity());
 								invoiceCodes.add(invoiceCode);
+								
 								invoiceItems.remove(index);
 							} else {
 								System.out.println(invoiceItems.get(index).getClass().getSimpleName());
 							}
-						}
+						
 					}
-					e = new Invoice(invoiceCodes, storeCode, customer, salesperson, date);
+					e = new Invoice(tokens[0], invoiceCodes, storeCode, customer, salesperson, date);
 
 					result.add(e);
 				}
@@ -255,8 +269,8 @@ public class DataConverter {
 		return result;
 	}
 
-	public static List<InvoiceItem> parseDataFileInvoiceItems(String file) {
-		List<InvoiceItem> result = new ArrayList<InvoiceItem>();
+	public static List<Item> parseDataFileInvoiceItems(String file) {
+		List<Item> result = new ArrayList<Item>();
 		File f = new File(file);
 		try (Scanner s = new Scanner(f)) {
 			int size = 0;
@@ -267,7 +281,7 @@ public class DataConverter {
 						size = Integer.parseInt(line);
 						line = s.nextLine();
 					}
-					InvoiceItem e = null;
+					Item e = null;
 					String tokens[] = line.split(",");
 					String code = tokens[0];
 
@@ -280,9 +294,9 @@ public class DataConverter {
 						int index = Collections.binarySearch(items, key, byId);
 						Equipment itemCode = new Equipment(tokens[1], items.get(index).getType(),
 								items.get(index).getModel());
-						int price = Integer.parseInt(tokens[3]);
+						Double price = Double.parseDouble(tokens[3]);
 
-						e = new Purchase(code, itemCode, price);
+						e = new Purchase(code, itemCode.getItemCode(), itemCode.getModel(), price);
 					} else if (tokens[2].equals("L")) {
 						Equipment key = new Equipment(tokens[1]);
 						int index = Collections.binarySearch(items, key, byId);
@@ -291,22 +305,27 @@ public class DataConverter {
 						Double fee = Double.parseDouble(tokens[3]);
 						String startDate = tokens[4];
 						String endDate = tokens[5];
-						e = new Lease(code, itemCode, fee, startDate, endDate);
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				        LocalDate startDateLocal = LocalDate.parse(startDate, formatter);
+				        LocalDate endDateLocal = LocalDate.parse(endDate, formatter);
+						e = new Lease(code, itemCode.getItemCode(), itemCode.getModel(), fee, startDateLocal, endDateLocal);
 					} else {
 						if (tokens[2].contains(".")) {
 							Service key = new Service(tokens[1]);
 							int index = Collections.binarySearch(items, key, byId);
 							Service itemCode = new Service(tokens[1], items.get(index).getType(),
 									items.get(index).getHourlyRate());
-							double hoursBilled = Double.parseDouble(tokens[2]);
-							e = new ServiceRecord(code, itemCode, hoursBilled);
+							Double hoursBilled = Double.parseDouble(tokens[2]);
+							Service service = new Service(code, itemCode.getItemCode(), itemCode.getHourlyRate());
+							e = new Service(service, hoursBilled);
 						} else {
 							Product key = new Product(tokens[1]);
 							int index = Collections.binarySearch(items, key, byId);
 							Product itemCode = new Product(tokens[1], items.get(index).getType(),
 									items.get(index).getUnit(), items.get(index).getPrice());
 							int amount = Integer.parseInt(tokens[2]);
-							e = new ProductRecord(code, itemCode, amount);
+							Product product = new Product(code, itemCode.getItemCode(), itemCode.getUnit(), itemCode.getPrice());
+							e = new Product(product, amount);
 						}
 					}
 
