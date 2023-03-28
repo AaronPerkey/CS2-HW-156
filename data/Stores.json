@@ -1,0 +1,532 @@
+{
+"Stores":[
+{
+  "storeCode": "3c0234",
+  "managerCode": {
+    "personCode": "fdc267",
+    "firstName": "Kyle",
+    "lastName": "Gann",
+    "address": {
+      "street": "601 Lotheville Road",
+      "city": "Savannah",
+      "state": "GA",
+      "zip": "31405",
+      "county": "US"
+    },
+    "email": [
+      "squarry0@reverbnation.com",
+      "squarry0@salon.com"
+    ]
+  },
+  "address": {
+    "street": "123 Cornhusker Way",
+    "city": "Lincoln",
+    "state": "NE",
+    "zip": "68508",
+    "county": "US"
+  },
+  "invoice": [
+    {
+      "invoice": [
+        {
+          "hoursBilled": 5.0,
+          "code": "INV002",
+          "itemCode": {
+            "hourlyRate": 25.0,
+            "code": "432kn2l",
+            "type": "Tractor Driving Lessons"
+          }
+        },
+        {
+          "quantity": 154,
+          "code": "INV002",
+          "itemCode": {
+            "unit": "bag",
+            "price": 50.0,
+            "code": "3n3k4l2",
+            "type": "Corn seed"
+          }
+        },
+        {
+          "price": 255,
+          "code": "INV002",
+          "itemCode": {
+            "model": "Haymaker 400",
+            "code": "740515",
+            "type": "Baler"
+          }
+        },
+        {
+          "fee": 1034.0,
+          "StartDate": "4027-01-11",
+          "endDate": "4027-03-09",
+          "code": "INV002",
+          "itemCode": {
+            "model": "Ryobi er12",
+            "code": "1d4d89",
+            "type": "Lawn Mower"
+          }
+        }
+      ],
+      "store": "3c0234",
+      "customer": {
+        "personCode": "f22d0b",
+        "firstName": "Moonbeam",
+        "lastName": "Denny",
+        "address": {
+          "street": "40 Aberg Avenue",
+          "city": "Fresno",
+          "state": "CA",
+          "zip": "93786",
+          "county": "US"
+        },
+        "email": [
+          "dwitherbed8@umich.edu",
+          "dwitherbed8@pbs.org",
+          "dwitherbed8@privacy.gov.au"
+        ]
+      },
+      "salesperson": {
+        "personCode": "0375b6",
+        "firstName": "Gerry",
+        "lastName": "Nonnah",
+        "address": {
+          "street": "0 Havey Avenue",
+          "city": "Cleveland",
+          "state": "OH",
+          "zip": "44177",
+          "county": "US"
+        },
+        "email": [
+          "nmichelotti1@sbwire.com",
+          "nmichelotti1@vistaprint.com",
+          "nmichelotti1@gravatar.com",
+          "nmichelotti1@patch.com"
+        ]
+      },
+      "date": "4027-01-11"
+    },
+    {
+      "invoice": [
+        {
+          "quantity": 100,
+          "code": "INV001",
+          "itemCode": {
+            "unit": "ton",
+            "price": 850.0,
+            "code": "23n4kl2",
+            "type": "Top soil"
+          }
+        },
+        {
+          "hoursBilled": 3.0,
+          "code": "INV001",
+          "itemCode": {
+            "hourlyRate": 1000.0,
+            "code": "n43k2l3",
+            "type": "Plowing"
+          }
+        },
+        {
+          "fee": 2485.0,
+          "StartDate": "2666-01-30",
+          "endDate": "2666-02-25",
+          "code": "INV001",
+          "itemCode": {
+            "model": "F105",
+            "code": "649f88",
+            "type": "Truck"
+          }
+        },
+        {
+          "price": 1117,
+          "code": "INV001",
+          "itemCode": {
+            "model": "SUPER MEGA 200x",
+            "code": "1d4d73",
+            "type": "Dog"
+          }
+        },
+        {
+          "quantity": 348,
+          "code": "INV001",
+          "itemCode": {
+            "unit": "bale",
+            "price": 500.0,
+            "code": "342foa3",
+            "type": "Haybale"
+          }
+        }
+      ],
+      "store": "3c0234",
+      "customer": {
+        "personCode": "48b5dc",
+        "firstName": "Leaming",
+        "lastName": "Frants",
+        "address": {
+          "street": "7 Sunbrook Center",
+          "city": "Young America",
+          "state": "MN",
+          "zip": "55551",
+          "county": "US"
+        },
+        "email": [
+          "fleaming4@elpais.com",
+          "fleaming4@unblog.fr",
+          "fleaming4@hugedomains.com"
+        ]
+      },
+      "salesperson": {
+        "personCode": "fdc267",
+        "firstName": "Kyle",
+        "lastName": "Gann",
+        "address": {
+          "street": "601 Lotheville Road",
+          "city": "Savannah",
+          "state": "GA",
+          "zip": "31405",
+          "county": "US"
+        },
+        "email": [
+          "squarry0@reverbnation.com",
+          "squarry0@salon.com"
+        ]
+      },
+      "date": "2666-01-33"
+    }
+  ]
+},
+{
+  "storeCode": "9f352c",
+  "managerCode": {
+    "personCode": "aa887a",
+    "firstName": "John",
+    "lastName": "Arbuckle",
+    "address": {
+      "street": "65337 Straubel Place",
+      "city": "Muncie",
+      "state": "IN",
+      "zip": "47306",
+      "county": "US"
+    },
+    "email": [
+      "wleavold2@npr.org",
+      "wleavold2@craigslist.org"
+    ]
+  },
+  "address": {
+    "street": "4242 A Street",
+    "city": "Omaha",
+    "state": "NE",
+    "zip": "68117",
+    "county": "US"
+  },
+  "invoice": [
+    {
+      "invoice": [
+        {
+          "hoursBilled": 1.5,
+          "code": "INV003",
+          "itemCode": {
+            "hourlyRate": 225.5,
+            "code": "8432941",
+            "type": "Cattle Vaccination"
+          }
+        },
+        {
+          "quantity": 410,
+          "code": "INV003",
+          "itemCode": {
+            "unit": "liter",
+            "price": 10.25,
+            "code": "n3453js",
+            "type": "Fertilizer"
+          }
+        },
+        {
+          "price": 4501,
+          "code": "INV003",
+          "itemCode": {
+            "model": "Large Corp X25",
+            "code": "3506f6",
+            "type": "Farmer"
+          }
+        },
+        {
+          "fee": 1101.0,
+          "StartDate": "5572-05-01",
+          "endDate": "5590-12-03",
+          "code": "INV003",
+          "itemCode": {
+            "model": "SUPER MEGA 200x",
+            "code": "1d4d73",
+            "type": "Dog"
+          }
+        }
+      ],
+      "store": "9f352c",
+      "customer": {
+        "personCode": "99cdc9",
+        "firstName": "Antoshin",
+        "lastName": "Rice",
+        "address": {
+          "street": "3 5th Junction",
+          "city": "Fort Collins",
+          "state": "CO",
+          "zip": "80525",
+          "county": "US"
+        },
+        "email": [
+          "rantoshina@cam.ac.uk",
+          "rantoshina@amazonaws.com",
+          "rantoshina@economist.com",
+          "rantoshina@sfgate.com"
+        ]
+      },
+      "salesperson": {
+        "personCode": "aa887a",
+        "firstName": "John",
+        "lastName": "Arbuckle",
+        "address": {
+          "street": "65337 Straubel Place",
+          "city": "Muncie",
+          "state": "IN",
+          "zip": "47306",
+          "county": "US"
+        },
+        "email": [
+          "wleavold2@npr.org",
+          "wleavold2@craigslist.org"
+        ]
+      },
+      "date": "5572-05-01"
+    },
+    {
+      "invoice": [
+        {
+          "fee": 4362.0,
+          "StartDate": "6047-01-30",
+          "endDate": "6047-06-15",
+          "code": "INV004",
+          "itemCode": {
+            "model": "Looploop 120x",
+            "code": "0ec6e9",
+            "type": "Harvester"
+          }
+        },
+        {
+          "price": 2504,
+          "code": "INV004",
+          "itemCode": {
+            "model": "Looploop 120x",
+            "code": "0ec6e9",
+            "type": "Harvester"
+          }
+        },
+        {
+          "quantity": 104,
+          "code": "INV004",
+          "itemCode": {
+            "unit": "pot",
+            "price": 3.0,
+            "code": "t7450us",
+            "type": "Planter"
+          }
+        },
+        {
+          "hoursBilled": 10.2,
+          "code": "INV004",
+          "itemCode": {
+            "hourlyRate": 2025.5,
+            "code": "im329op",
+            "type": "Extermination"
+          }
+        }
+      ],
+      "store": "9f352c",
+      "customer": {
+        "personCode": "89a8a1",
+        "firstName": "Pottie",
+        "lastName": "Portia",
+        "address": {
+          "street": "427 Nevada Pass",
+          "city": "Toledo",
+          "state": "OH",
+          "zip": "43656",
+          "county": "US"
+        },
+        "email": []
+      },
+      "salesperson": {
+        "personCode": "cefa4f",
+        "firstName": "John",
+        "lastName": "Hilbert",
+        "address": {
+          "street": "81 Northport Avenue",
+          "city": "Mobile",
+          "state": "AL",
+          "zip": "36628",
+          "county": "US"
+        },
+        "email": [
+          "zcullington3@engadget.com",
+          "zcullington3@wisc.edu",
+          "zcullington3@google.es",
+          "zcullington3@google.pl"
+        ]
+      },
+      "date": "6047-01-30"
+    }
+  ]
+},
+{
+  "storeCode": "73668b",
+  "managerCode": {
+    "personCode": "fdc267",
+    "firstName": "Kyle",
+    "lastName": "Gann",
+    "address": {
+      "street": "601 Lotheville Road",
+      "city": "Savannah",
+      "state": "GA",
+      "zip": "31405",
+      "county": "US"
+    },
+    "email": [
+      "squarry0@reverbnation.com",
+      "squarry0@salon.com"
+    ]
+  },
+  "address": {
+    "street": "RR9901",
+    "city": "Mead",
+    "state": "NE",
+    "zip": "61234",
+    "county": "US"
+  },
+  "invoice": []
+},
+{
+  "storeCode": "13568h",
+  "managerCode": {
+    "personCode": "529dbe",
+    "firstName": "Stammers",
+    "lastName": "Bernadette",
+    "address": {
+      "street": "33 Lake View Alley",
+      "city": "Roanoke",
+      "state": "VA",
+      "zip": "24040",
+      "county": "US"
+    },
+    "email": [
+      "bstammers5@flickr.com",
+      "bstammers5@mapy.cz",
+      "bstammers5@cpanel.net"
+    ]
+  },
+  "address": {
+    "street": "OR5911",
+    "city": "Lead North Store",
+    "state": "CA",
+    "zip": "59023",
+    "county": "US"
+  },
+  "invoice": [
+    {
+      "invoice": [],
+      "store": "13568h",
+      "customer": {
+        "personCode": "fdc267",
+        "firstName": "Kyle",
+        "lastName": "Gann",
+        "address": {
+          "street": "601 Lotheville Road",
+          "city": "Savannah",
+          "state": "GA",
+          "zip": "31405",
+          "county": "US"
+        },
+        "email": [
+          "squarry0@reverbnation.com",
+          "squarry0@salon.com"
+        ]
+      },
+      "salesperson": {
+        "personCode": "d78da4",
+        "firstName": "Soloway",
+        "lastName": "Keslie",
+        "address": {
+          "street": "5595 Saint Paul Place",
+          "city": "Annapolis",
+          "state": "MD",
+          "zip": "21405",
+          "county": "US"
+        },
+        "email": [
+          "ksoloway9@amazon.co.uk",
+          "ksoloway9@sitemeter.com",
+          "ksoloway9@cmu.edu",
+          "ksoloway9@unicef.org"
+        ]
+      },
+      "date": "2023-03-10"
+    }
+  ]
+},
+{
+  "storeCode": "96f2cf",
+  "managerCode": {
+    "personCode": "fdc267",
+    "firstName": "Kyle",
+    "lastName": "Gann",
+    "address": {
+      "street": "601 Lotheville Road",
+      "city": "Savannah",
+      "state": "GA",
+      "zip": "31405",
+      "county": "US"
+    },
+    "email": [
+      "squarry0@reverbnation.com",
+      "squarry0@salon.com"
+    ]
+  },
+  "address": {
+    "street": "452 13th Street",
+    "city": "Hastings",
+    "state": "NE",
+    "zip": "68901",
+    "county": "US"
+  },
+  "invoice": []
+},
+{
+  "storeCode": "25d901",
+  "managerCode": {
+    "personCode": "aa887a",
+    "firstName": "John",
+    "lastName": "Arbuckle",
+    "address": {
+      "street": "65337 Straubel Place",
+      "city": "Muncie",
+      "state": "IN",
+      "zip": "47306",
+      "county": "US"
+    },
+    "email": [
+      "wleavold2@npr.org",
+      "wleavold2@craigslist.org"
+    ]
+  },
+  "address": {
+    "street": "180 Magdeline Plaza",
+    "city": "Wichita",
+    "state": "KS",
+    "zip": "67230",
+    "county": "US"
+  },
+  "invoice": []
+}
+]
+}

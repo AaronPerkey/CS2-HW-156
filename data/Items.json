@@ -1,0 +1,95 @@
+{
+"items":[
+{
+  "model": "Ryobi er12",
+  "code": "1d4d89",
+  "type": "Lawn Mower"
+},
+{
+  "model": "SUPER MEGA 200x",
+  "code": "1d4d73",
+  "type": "Dog"
+},
+{
+  "model": "Looploop 120x",
+  "code": "0ec6e9",
+  "type": "Harvester"
+},
+{
+  "model": "Haymaker 400",
+  "code": "740515",
+  "type": "Baler"
+},
+{
+  "model": "Large Corp X25",
+  "code": "3506f6",
+  "type": "Farmer"
+},
+{
+  "model": "F105",
+  "code": "649f88",
+  "type": "Truck"
+},
+{
+  "unit": "bale",
+  "price": 500.0,
+  "code": "342foa3",
+  "type": "Haybale"
+},
+{
+  "unit": "bag",
+  "price": 50.0,
+  "code": "3n3k4l2",
+  "type": "Corn seed"
+},
+{
+  "unit": "liter",
+  "price": 10.25,
+  "code": "n3453js",
+  "type": "Fertilizer"
+},
+{
+  "unit": "pot",
+  "price": 3.0,
+  "code": "t7450us",
+  "type": "Planter"
+},
+{
+  "unit": "lft",
+  "price": 8.0,
+  "code": "l4k32j4",
+  "type": "Wire fencing"
+},
+{
+  "unit": "ton",
+  "price": 850.0,
+  "code": "23n4kl2",
+  "type": "Top soil"
+},
+{
+  "hourlyRate": 100.0,
+  "code": "2334b23",
+  "type": "Delivery"
+},
+{
+  "hourlyRate": 1000.0,
+  "code": "n43k2l3",
+  "type": "Plowing"
+},
+{
+  "hourlyRate": 25.0,
+  "code": "432kn2l",
+  "type": "Tractor Driving Lessons"
+},
+{
+  "hourlyRate": 225.5,
+  "code": "8432941",
+  "type": "Cattle Vaccination"
+},
+{
+  "hourlyRate": 2025.5,
+  "code": "im329op",
+  "type": "Extermination"
+}
+]
+}
