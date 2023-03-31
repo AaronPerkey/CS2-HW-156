@@ -3,7 +3,7 @@
 # 
 #This creates tables and inserts data for FMT sales.
 #
-# Name(s): Aaron, Kyle
+# Name(s): Aaron Perkey, Kyle Gann
 # Date: 2023-03-22
 
 drop table if exists InvoiceItems;
@@ -121,80 +121,101 @@ create table InvoiceItems(
     );
 
 insert into Country (country) values 
-('United States'), 
-('Canada'), 
-('Mexico'), 
-('United Kingdom');
+('US');
 
 insert into ZipCode (zipCode) values 
-('10001'), 
-('12345'), 
-('45050'), 
-('67892');
+('68508'), ('68117'), ('61234'), ('59023'),('68901'), ('67230'), ('31405'), 
+('44177'), ('47306'), ('36628'), ('55551'), ('24040'), ('93907'), ('75074'), 
+('93786'), ('21405'), ('80525'),('43656');
 
 insert into State (state) values 
-('Texas'), 
-('Nebraska'), 
-('Arkansas'), 
-('Georga');
+('NE'), ('CA'), ('KS'), ('GA'),
+('OH'), ('IN'), ('AL'), ('MN'),
+('VA'), ('ND'), ('MD'), ('CO');
 
 insert into City (city) values 
-('Dallas'), 
-('Lincoln'), 
-('Jonesboro'), 
-('Atlanta');
+('Lincoln'), ('Omaha'), ('Mead'), ('Lead North Store'), ('Hastings'), ('Wichita'),
+('Savannah'), ('Cleveland'), ('Muncie'), ('Mobile'), ('Young America'), ('Roanoke'),
+('Salinas'), ('Gravity Falls'), ('Fresno'), ('Annapolis'), ('Fort Collins'), ('Toledo');
 
 insert into Street (street) values 
-('Broadway'), 
-('Yonge Street'), 
-('Chapultepec'), 
-('Oxford Street');
+('123 Cornhusker Way'), ('4242 A Street'), ('RR9901'), ('OR5911'), ('452 13th Street'), ('180 Magdeline Plaza'),
+('601 Lotheville Road,Savannah'), ('0 Havey Avenue,Cleveland'), ('65337 Straubel Place'), ('81 Northport Avenue'), 
+('7 Sunbrook Center'), ('33 Lake View Alley'),('6811 Pleasure Point'), ('37 Hoard Circle'), ('40 Aberg Avenue'), 
+('5595 Saint Paul Place'), ('3 5th Junction'), ('427 Nevada Pass');
 
 insert into Address (streetId, cityId, stateId, zipCodeId, countryId) values 
-(1, 1, 1, 1, 1), 
-(2, 2, 2, 2, 2), 
-(3, 3, 3, 3, 3), 
-(4, 4, 4, 4, 4);
+(1, 1, 1, 1, 1), (2, 2, 1, 2, 1), (3, 3, 1, 3, 1),(4, 4, 2, 4, 1),(5, 5, 1, 5, 1),(6, 6, 3, 6, 1),
+(7, 7, 4, 7, 1),(8, 8, 5, 8, 1),(9, 9, 6, 9, 1),(10, 10, 7, 10, 1),(11, 11, 8, 11, 1),(12, 12, 9, 12, 1),
+(13, 13, 2, 13, 1),(14, 14, 10, 14, 1),(15, 15, 2, 15, 1),(16, 16, 11, 16, 1),(17, 17, 12, 17, 1),(18, 18, 5, 18, 1);
 
 insert into Person (personCode, lastName, firstName, addressId) values 
-('P001', 'Smith', 'John', 1), 
-('P002', 'Garcia', 'Maria', 2), 
-('P003', 'Lee', 'David', 3), 
-('P004', 'Patel', 'Priya', 4);
+('fdc267', 'Gann', 'Kyle', 7), ('0375b6', 'Nonnah', 'Gerry', 8), ('aa887a', 'Arbuckle', 'John', 9), ('cefa4f', 'Hilbert', 'John', 10),
+('48b5dc', 'Frants', 'Leaming', 11), ('529dbe', 'Bernadette', 'Stammers', 12), ('aef60b', 'Gianni', 'Uttley', 13), ('8197d3', 'Pines', 'Dipper', 14),
+('f22d0b', 'Denny', 'Moonbeam', 15), ('d78da4', 'Keslie', 'Soloway', 16), ('99cdc9', 'Rice', 'Antoshin', 17), ('89a8a1', 'Portia', 'Pottie', 18);
 
 insert into Email (personId, address) values 
-(1, 'john.smith@example.com'), 
-(1, 'bigfoot@hotmail.com'),
-(2, 'maria.garcia@example.com'), 
-(3, 'david.lee@example.com'), 
-(4, 'priya.patel@example.com');
+(1, 'squarry0@reverbnation.com'), (1, 'squarry0@salon.com'),
+(2, 'nmichelotti1@sbwire.com'), (2, 'nmichelotti1@vistaprint.com'), (2, 'nmichelotti1@gravatar.com'), (2, 'nmichelotti1@patch.com'),
+(3, 'wleavold2@npr.org'), (3, 'wleavold2@craigslist.org'),
+(4, 'zcullington3@engadget.com'), (4, 'zcullington3@wisc.edu'), (4, 'zcullington3@google.es'), (4, 'zcullington3@google.pl'),
+(5, 'fleaming4@elpais.com'), (5, 'fleaming4@unblog.fr'), (5, 'fleaming4@hugedomains.com'),
+(6, 'bstammers5@flickr.com'), (6, 'bstammers5@mapy.cz'), (6, 'bstammers5@cpanel.net'),
+(7, 'guttley6@sogou.com'), (7, 'guttley6@linkedin.com'), (7, 'guttley6@latimes.com'),
+(8, 'fhalse7@europa.eu'), (8, 'fhalse7@microsoft.com'), (8, 'fhalse7@fc2.com'), (8, 'fhalse7@moonfruit.com'),
+(9, 'dwitherbed8@umich.edu'), (9, 'dwitherbed8@pbs.org'), (9, 'dwitherbed8@privacy.gov.au'),
+(10, 'ksoloway9@amazon.co.uk'), (10, 'ksoloway9@sitemeter.com'), (10, 'ksoloway9@cmu.edu'), (10, 'ksoloway9@unicef.org'),
+(11, 'rantoshina@cam.ac.uk'), (11, 'rantoshina@amazonaws.com'), (11, 'rantoshina@economist.com,'), (11, 'rantoshina@sfgate.com');
 
 insert into Store (storeCode, manager, addressId) values 
-('S001', 1, 1), 
-('S002', 2, 2), 
-('S003', 3, 3), 
-('S004', 4, 4);
+('3c0234', 1, 1), 
+('9f352c', 3, 2), 
+('73668b', 1, 3), 
+('13568h', 3, 4),
+('96f2cf', 1, 5),
+('25d901', 3, 6);
 
 insert into Invoice (invoiceCode, storeId, customer, salesPerson, date) values 
-('INV001', 1, 2, 3, '2022-01-01'), 
-('INV002', 2, 3, 4, '2022-02-01'), 
-('INV003', 3, 4, 1, '2022-03-01'), 
-('INV004', 4, 1, 2, '2022-04-01'),
-('INV005', 3, 1, 1, '2022-05-01');
+('INV001', 1, 5, 1, '2666-01-33'), 
+('INV002', 1, 9, 2, '4027-01-11'), 
+('INV003', 2, 11, 3, '5572-05-01'), 
+('INV004', 2, 12, 4, '6047-01-30'),
+('INV005', 4, 1, 10, '2023-03-10');
 
 insert into Items (itemsCode, type, itemName, unit, model, unitPrice, hourlyRate) values 
-('ITM001', 'P', 'Haybale', 'bale', NULL, 10.99, NULL), 
-('ITM002', 'P', 'Fertilizer', 'liter', NULL, 25.99, NULL), 
-('ITM003', 'S', 'Plowing snow', NULL, NULL, NULL, 75.00), 
-('ITM004', 'S', 'Mowing lawn', NULL, NULL, NULL, 100.00),
-('ITM005', 'E', 'F150', NULL, 'Lightning', 	NULL, NULL),
-('ITM006', 'E', 'Jeep Wrangler', NULL, 'Sahara', NULL, NULL);
+('1d4d89','E','Lawn Mower', null,'Ryobi er12', null, null),
+('1d4d73','E','Dog', null,'SUPER MEGA 200x', null, null),
+('0ec6e9','E','Harvester', null,'Looploop 120x', null, null),
+('740515','E','Baler', null,'Haymakr 400', null, null),
+('3506f6','E','Farmer', null,'Large Corp X25', null, null),
+('649f88','E','Truck', null,'F105', null, null),
+('342foa3','P','Haybale','bale', null, 500, null),
+('3n3k4l2','P','Corn seed','bag', null, 50, null),
+('n3453js','P','Fertilizer','liter', null, 10.25, null),
+('t7450us','P','Planter','pot', null, 3, null),
+('l4k32j4','P','Wire fencing','lft', null, 8, null),
+('23n4kl2','P','Top soil','ton', null, 850, null),
+('2334b23','S','Delivery', null, null, null, 100),
+('n43k2l3','S','Plowing', null, null, null, 1000),
+('432kn2l','S','Tractor Driving Lessons', null, null, null, 25),
+('8432941','S','Cattle Vaccination', null, null, null, 225.50),
+('im329op','S','Extermination', null, null, null, 2025.50);
 
 insert into InvoiceItems (invoiceId, itemsId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values 
-(1, 1, NULL, NULL, 3, NULL, NULL, NULL),
-(2, 2, NULL, NULL, 2, NULL, NULL, NULL),
-(2, 5, 'P', 40000.00, NULL, NULL, NULL, NULL),
-(2, 6, 'P', 50000.00, NULL, NULL, NULL, NULL), 
-(4, 3, NULL, NULL, NULL, 24, NULL, NULL),
-(4, 4, NULL, NULL, NULL, 36, NULL, NULL),
-(5, 3, NULL, NULL, NULL, 24, NULL, NULL);
+(1, 2, 'P', 1117, NULL, NULL, NULL, NULL),
+(4, 3, 'P', 2504, NULL, NULL, NULL, NULL),
+(2, 4, 'P', 255, NULL, NULL, NULL, NULL),
+(3, 5, 'P', 4501, NULL, NULL, NULL, NULL), 
+(1, 6, 'L', 2485, NULL, NULL, '2666-01-30', '2666-02-25'),
+(2, 1, 'L', 1034, NULL, NULL, '4027-01-11', '4027-03-09'),
+(3, 2, 'L', 1101, NULL, NULL, '5572-05-01', '5590-12-03'),
+(4, 3, 'L', 4362, NULL, NULL, '6047-01-30', '6047-06-15'),
+(1, 7, null, null, 348, null, null, null),
+(1, 12, null, null, 100, null, null, null),
+(2, 8, null, null, 154, null, null, null),
+(3, 9, null, null, 410, null, null, null),
+(4, 10, null, null, 104, null, null, null),
+(1, 14, null, null, null, 3.0, null, null),
+(2, 15, null, null, null, 5.0, null, null),
+(3, 16, null, null, null, 1.5, null, null),
+(4, 17, null, null, null, 10.2, null, null);
