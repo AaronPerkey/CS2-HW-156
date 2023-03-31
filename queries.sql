@@ -3,7 +3,7 @@
 # 
 #This creates the qrery's from the FMT sales tables
 #
-# Name(s): Aaron, Kyle
+# Name(s): Aaron Perkey, Kyle Gann
 # Date: 2023-03-22
 
 # This query to retrieves a persons code and name.
@@ -27,8 +27,10 @@ select Email.address from Email where personId = 1;
 update Email set address = "yougotmail@lol.com" where emailId = 1;
 
 # These query's to remove a specific person record.
-delete from Email where personId = 5;
-delete from Person where personId = 5;
+delete from Email where personId = 17;
+delete from Invoice where salesperson = 17;
+delete from Invoice where customer = 17;
+delete from Person where personId = 17;
 
 # A query to get all the items on a specific invoice record.
 select Invoice.invoiceCode, Items.itemsCode, Items.itemName from Items
@@ -41,32 +43,30 @@ select Person.firstName, Person.lastName, Items.itemName from Items
 left join InvoiceItems on Items.itemsId = InvoiceItems.itemsId
 left join Invoice on InvoiceItems.invoiceId = Invoice.invoiceId
 left join Person on Invoice.customer = Person.personId
-where Person.personId = 1;
+where Person.personId = 5;
 
 # A query to find the total number of sales made at each store.
-select Store.storeCode, count(InvoiceItems.itemsId) as SalesMade from InvoiceItems
-left join Invoice on InvoiceItems.invoiceId = Invoice.invoiceId
-left join Store on Store.storeId = Invoice.storeId
+select Store.storeCode, count(Invoice.invoiceId) as SalesMade from Invoice
+join Store on Store.storeId = Invoice.storeId
 group by storeCode;
 
 # A query to find the total number of sales made by each employee.
-select Person.firstName, Person.lastName, Count(InvoiceItems.itemsId) as SalesMade from InvoiceItems
-left join Invoice on InvoiceItems.invoiceId = Invoice.invoiceId
+select Person.firstName, Person.lastName, Count(Invoice.invoiceId) as SalesMade from Invoice
 left join Person on Person.personId = Invoice.salesPerson
 group by salesPerson;
 
 # A query to find the subtotal charge of all products in each invoice.
-select i.invoiceCode, round(sum(itm.unitPrice * ii.quantity),2) from Invoice i
-left join InvoiceItems ii on i.invoiceId = ii.invoiceId
-left join Items itm on ii.itemsId = itm.itemsId
-group by i.invoiceId;
+select Invoice.invoiceCode, sum(Items.unitPrice * InvoiceItems.quantity) as Subtotal from Invoice
+left join InvoiceItems on Invoice.invoiceId = InvoiceItems.invoiceId
+left join Items on InvoiceItems.itemsId = Items.itemsId
+group by Invoice.invoiceId;
 
 # A query to detect invalid data.
-select Invoice.invoiceCode, Items.itemName from Items
+select Invoice.invoiceCode, Items.type as ItemType, Items.itemName from Items
 join InvoiceItems on Items.itemsId = InvoiceItems.itemsId
 join Invoice on Invoice.invoiceId = InvoiceItems.invoiceId
 group by InvoiceItems.itemsId, InvoiceItems.invoiceId
-having count(InvoiceItems.itemsId) > 1;
+having count(InvoiceItems.itemsId) > 1 and Items.type = "P";
 
 
 
