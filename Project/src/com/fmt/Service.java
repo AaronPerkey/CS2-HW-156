@@ -6,11 +6,6 @@ public class Service extends Item{
 	private Double hourlyRate;
 	private Double hoursBilled;
 
-
-	@Override
-	public Double getHoursBilled() {
-		return hoursBilled;
-	}
 	
 	public Service(String itemCode, String name, Double hourlyRate) {
 		super(itemCode, name);
@@ -24,6 +19,11 @@ public class Service extends Item{
 	}
 	public Service(String code) {
 		super(code);
+	}
+	
+	@Override
+	public Double getHoursBilled() {
+		return hoursBilled;
 	}
 	
 	@Override
