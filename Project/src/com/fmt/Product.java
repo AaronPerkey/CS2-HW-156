@@ -32,13 +32,14 @@ public class Product extends Item{
 	public Double getPrice() {
 		return price;
 	}
-	public Double getTax() {
-		return price * 0.075;
-	}
 	
 	@Override
 	public int getQuantity() {
 		return quantity;
+	}
+	
+	public Double getTax() {
+		return price * 0.075;
 	}
 	
 	@Override
