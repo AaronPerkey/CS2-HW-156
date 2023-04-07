@@ -28,6 +28,11 @@ public class Invoice {
 		this.date = date;
 	}
 
+	public Invoice(String store) {
+		super();
+		this.store = store;
+	}
+	
 	public List<Item> getItem() {
 		return items;
 	}
@@ -35,11 +40,6 @@ public class Invoice {
 
 	public String getInvoiceCode() {
 		return invoiceCode;
-	}
-
-	public Invoice(String store) {
-		super();
-		this.store = store;
 	}
 
 	public String getStore() {
