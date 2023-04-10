@@ -10,7 +10,14 @@ import java.util.List;
 
 
 public class DatabaseLoader {
-
+	
+	/**
+	 * Returns an address class
+	 * 
+	 * @param addressId
+	 * @param conn
+	 * @return
+	 */
 	public static Address getAddress(int addressId, Connection conn) {
 
 		String street = null;
