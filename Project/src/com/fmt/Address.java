@@ -16,6 +16,18 @@ public class Address {
 		this.county = county;
 	}
 
+		// change to this
+	public Address(Integer addressId, String street, String state, String county) {
+		this.addressId = addressId;
+		this.street = street;
+		this.county = county;
+		this.state = state;
+	}
+	
+	public Integer getAddressId() {
+		return addressId;
+	}
+	
 	public String getStreet() {
 		return street;
 	}
