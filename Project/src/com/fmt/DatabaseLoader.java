@@ -11,6 +11,10 @@ import java.util.List;
 
 public class DatabaseLoader {
 	
+	/**
+	 * Loads a person from the sql database
+	 * @return List of person
+	 */
 	public static List<Person> loadPersons() {
 		List<Person> persons = new ArrayList<>();
 		
@@ -37,26 +41,29 @@ public class DatabaseLoader {
 				String lastName = rs.getString("lastName");
 				int personId = rs.getInt("personId");
 				int addressId = rs.getInt("addressId");
-				
-				String street = null;
-				String city = null;
-				String state = null;
-				String zipCode = null;
-				String country = null;
-				
+
 				Address address = getAddress(addressId, conn);
 				List<String> email = new ArrayList<>();
-
-				email.add("Bob@gmail.com");
-
-
+				//getting the address
+				PreparedStatement psj = null;
+				ResultSet rsj = null;
+				String emailQuery = "Select address from Email where personId = ?;";
+				psj = conn.prepareStatement(emailQuery);
+				psj.setInt(1, personId);
+				rsj = psj.executeQuery();
+				while (rsj.next()) {
+					email.add(rsj.getString("address"));
+				}
+				rsj.close();
+				psj.close();
+				
 				e = new Person(personCode, firstName, lastName, address, email);
 				persons.add(e);
 			}
 			rs.close();
 			ps.close();
 		} catch (SQLException e) {
-			System.out.println("SQLException: ");
+			System.out.println("SQLException: could not run person queries");
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -69,16 +76,9 @@ public class DatabaseLoader {
 			if(conn != null && !conn.isClosed())
 				conn.close();
 		} catch (SQLException e) {
-			System.out.println("SQLException: ");
+			System.out.println("SQLException: Could not close connection, something is very wrong");
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}
-
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return persons;
 		
