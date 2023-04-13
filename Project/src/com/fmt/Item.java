@@ -9,9 +9,14 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+/**
+ * models an item
+ * @author kyleg
+ *
+ */
 public abstract class Item {
 
+	private Integer itemId;
 	private String itemCode;
 	private String name;
 	private String invoiceCode;
@@ -21,6 +26,15 @@ public abstract class Item {
 		this.name = name;
 		this.invoiceCode = invoiceCode;
 	}
+	
+	public Item(Integer itemId, String itemCode, String name, String invoiceCode) {
+		this.itemId = itemId;
+		this.itemCode = itemCode;
+		this.name = name;
+		this.invoiceCode = invoiceCode;
+	}
+
+
 
 	public Item(String code, String name) {
 		this.itemCode = code;
@@ -31,10 +45,13 @@ public abstract class Item {
 		this.itemCode = code;
 	}
 
+	public Integer getItemId() {
+		return itemId;
+	}
 	public String getItemCode() {
 		return itemCode;
 	}
-	public String getInoviceCode() {
+	public String getInvoiceCode() {
 		return invoiceCode;
 	}
 	public String getName() {

@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 
 public class Person {
 
+	private Integer personId;
 	private String personCode;
 	private String firstName;
 	private String lastName;
@@ -26,9 +27,34 @@ public class Person {
 	}
 	
 	
+	
+	
 	public Person(String personCode) {
 		this.personCode = personCode;
 	}
+	
+	
+
+	// for adding a person to sql
+	public Person(Integer personId, String personCode, String firstName, String lastName, Address address,
+			List<String> emails) {
+		this.personId = personId;
+		this.personCode = personCode;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.emails = emails;
+	}
+
+	
+
+
+
+	public Integer getPersonId() {
+		return personId;
+	}
+
+
 
 
 	public String getPersonCode() {

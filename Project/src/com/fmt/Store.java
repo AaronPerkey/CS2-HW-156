@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 
 public class Store {
 
+	private Integer storeId;
 	private String storeCode;
 	private Person managerCode;
 	private Address address;
@@ -25,12 +26,28 @@ public class Store {
 		this.invoice = invoice;
 	}
 
-
+	//For binary search
 	public Store(String storeCode) {
 		super();
 		this.storeCode = storeCode;
 	}
+	
+	
+	
 
+	public Integer getStoreId() {
+		return storeId;
+	}
+
+	//for adding a store to sql
+	public Store(Integer storeId, String storeCode, Person managerCode, Address address, List<Invoice> invoice) {
+		super();
+		this.storeId = storeId;
+		this.storeCode = storeCode;
+		this.managerCode = managerCode;
+		this.address = address;
+		this.invoice = invoice;
+	}
 
 	public String getStoreCode() {
 		return storeCode;
@@ -78,8 +95,8 @@ public class Store {
 			String store = this.getStoreCode();
 			String manager = this.getManagerCode().getFullName();
 			Double grandTotal = this.getGrandTotal();
-			int sales = this.getInvoice().size();
 			
+			int sales = this.getInvoice().size();
 
 			totalGrandTotal += grandTotal;
 			

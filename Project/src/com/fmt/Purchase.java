@@ -1,5 +1,9 @@
 package com.fmt;
-
+/**
+ * models a purchase
+ * @author kyleg
+ *
+ */
 public class Purchase extends Equipment {
 	
 	private Double price;

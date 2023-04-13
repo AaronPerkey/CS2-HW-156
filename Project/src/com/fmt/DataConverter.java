@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * This is the main driver program that parses the payroll data file and
- * produces a payroll report.
+ * This is the main driver program that parses the data file and
  *
  */
 public class DataConverter {
@@ -191,7 +190,7 @@ public class DataConverter {
 					
 					
 					for (int i = 0; i < invoiceItems.size(); i++) {
-						String code = invoiceItems.get(i).getInoviceCode();
+						String code = invoiceItems.get(i).getInvoiceCode();
 						if (tokens[0].equals(code)) {
 							index = i;
 						} else {
@@ -205,7 +204,7 @@ public class DataConverter {
 							if (invoiceItems.get(index).getClass().getSimpleName().equals("Purchase")) {
 
 								Purchase invoiceCode = new Purchase(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getPrice(), invoiceItems.get(index).getInoviceCode());
+										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getPrice(), invoiceItems.get(index).getInvoiceCode());
 								
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
@@ -216,7 +215,7 @@ public class DataConverter {
 						        
 								Lease invoiceCode = new Lease(invoiceItems.get(index).getItemCode(),
 										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getFee(),
-										startDate, endDate, invoiceItems.get(index).getInoviceCode());
+										startDate, endDate, invoiceItems.get(index).getInvoiceCode());
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
 
@@ -225,7 +224,7 @@ public class DataConverter {
 								Service invoiceCode1 = new Service(invoiceItems.get(index).getItemCode(),
 										invoiceItems.get(index).getName(),
 										invoiceItems.get(index).getHourlyRate());
-								Service invoiceCode = new Service(invoiceCode1, invoiceItems.get(index).getHoursBilled(), invoiceItems.get(index).getInoviceCode());
+								Service invoiceCode = new Service(invoiceCode1, invoiceItems.get(index).getHoursBilled(), invoiceItems.get(index).getInvoiceCode());
 								
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
@@ -233,7 +232,7 @@ public class DataConverter {
 								
 								Product invoiceCode1 = new Product(invoiceItems.get(index).getItemCode(),
 										invoiceItems.get(index).getName(), invoiceItems.get(index).getUnit(), invoiceItems.get(index).getPrice());
-								Product invoiceCode = new Product(invoiceCode1, invoiceItems.get(index).getQuantity(), invoiceItems.get(index).getInoviceCode());
+								Product invoiceCode = new Product(invoiceCode1, invoiceItems.get(index).getQuantity(), invoiceItems.get(index).getInvoiceCode());
 								invoiceCodes.add(invoiceCode);
 								
 								invoiceItems.remove(index);

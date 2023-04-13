@@ -1,7 +1,12 @@
 package com.fmt;
-
+/**
+ * A class to model an address
+ * @author kyleg
+ *
+ */
 public class Address {
 
+	private Integer addressId;
 	private String street;
 	private String city;
 	private String state;
@@ -15,19 +20,21 @@ public class Address {
 		this.zip = zip;
 		this.county = county;
 	}
+	
+	// change to this
+public Address(Integer addressId, String street, String city, String state, String zip, String county) {
+	this.addressId = addressId;
+	this.street = street;
+	this.county = county;
+	this.state = state;
+	this.zip = zip;
+}
 
-		// change to this
-	public Address(Integer addressId, String street, String state, String county) {
-		this.addressId = addressId;
-		this.street = street;
-		this.county = county;
-		this.state = state;
-	}
-	
-	public Integer getAddressId() {
-		return addressId;
-	}
-	
+public Integer getAddressId() {
+	return addressId;
+}
+
+
 	public String getStreet() {
 		return street;
 	}

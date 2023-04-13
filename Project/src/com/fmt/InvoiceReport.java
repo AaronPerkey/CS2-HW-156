@@ -31,11 +31,11 @@ public class InvoiceReport {
 		for (int i = 0; i < invoice.size(); i++) {
 			Double total = 0.0;
 			Double sumTax = 0.0;
-			if (invoice.get(i).getItem().size() > 0) {
-				String invoiceCode = invoice.get(i).getItem().get(0).getItemCode();
-				String store = invoice.get(i).getStore();
-				String customer = invoice.get(i).getCustomer().getFullName();
-
+			
+			String invoiceCode = invoice.get(i).getInvoiceCode();
+			String store = invoice.get(i).getStore();
+			String customer = invoice.get(i).getCustomer().getFullName();
+				
 				int numItems = invoice.get(i).getItem().size();
 
 				total += invoice.get(i).getInvoiceTotal();
@@ -48,20 +48,6 @@ public class InvoiceReport {
 						numItems, sumTax, total));
 				System.out.print(String.format("%s %10s %19s %16d        $%13.2f $%11.2f \n", invoiceCode, store, customer,
 						numItems, sumTax, total));
-			} else {
-				// if they didn't buy anything the invoice is invalid
-				String invoiceCode = "INVEMP";
-				String store = invoice.get(i).getStore();
-				String customer = invoice.get(i).getCustomer().getFullName();
-
-				int numItems = invoice.get(i).getItem().size();
-				writer.write(String.format("%s %10s %19s %16d        $%13.2f $%11.2f \n", invoiceCode, store, customer,
-						numItems, 0.0, 0.0));
-				System.out.print(String.format("%s %10s %19s %16d        $%13.2f $%11.2f \n", invoiceCode, store, customer,
-						numItems, 0.0, 0.0));
-				
-			}
-
 		}
 		writer.write(String.format(
 				"+----------------------------------------------------------------------------------------+\r\n"

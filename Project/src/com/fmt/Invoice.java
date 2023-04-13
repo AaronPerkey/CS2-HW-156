@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Invoice {
 
+	private Integer invoiceId;
 	private String invoiceCode;
 	private List<Item> items;
 	private String store;
@@ -28,11 +29,26 @@ public class Invoice {
 		this.date = date;
 	}
 
-	public Invoice(String store) {
+	//for adding to sql
+	public Invoice(Integer invoiceId, String invoiceCode, List<Item> items, String store, Person customer,
+			Person salesperson, String date) {
 		super();
+		this.invoiceId = invoiceId;
+		this.invoiceCode = invoiceCode;
+		this.items = items;
 		this.store = store;
+		this.customer = customer;
+		this.salesperson = salesperson;
+		this.date = date;
 	}
 	
+	
+
+
+	public Integer getInvoiceId() {
+		return invoiceId;
+	}
+
 	public List<Item> getItem() {
 		return items;
 	}
@@ -40,6 +56,11 @@ public class Invoice {
 
 	public String getInvoiceCode() {
 		return invoiceCode;
+	}
+
+	public Invoice(String store) {
+		super();
+		this.store = store;
 	}
 
 	public String getStore() {

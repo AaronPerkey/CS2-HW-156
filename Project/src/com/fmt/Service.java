@@ -1,11 +1,21 @@
 package com.fmt;
 
+/**
+ * Models a service
+ * @author kyleg
+ *
+ */
 public class Service extends Item{
 
 	
 	private Double hourlyRate;
 	private Double hoursBilled;
 
+
+	@Override
+	public Double getHoursBilled() {
+		return hoursBilled;
+	}
 	
 	public Service(String itemCode, String name, Double hourlyRate) {
 		super(itemCode, name);
@@ -19,11 +29,6 @@ public class Service extends Item{
 	}
 	public Service(String code) {
 		super(code);
-	}
-	
-	@Override
-	public Double getHoursBilled() {
-		return hoursBilled;
 	}
 	
 	@Override
@@ -46,8 +51,13 @@ public class Service extends Item{
 	public String toString() {
 		StringBuilder string = new StringBuilder();
 		string.append(this.getItemCode() + "  ");
+
+		Double hours = 0.0;
+		if (this.getHoursBilled() != null) {
+			hours = this.getHoursBilled();
+		}
 		Double serviceCost = (this.getHourlyRate()
-				* this.getHoursBilled());
+				* hours);
 		
 		String product = this.getName();
 		
@@ -55,7 +65,7 @@ public class Service extends Item{
 
 		string.append(String.format("\n       %.2f Hours @ $%.1f / Hour"
 				+ "\n                                                             $%10.2f \n",
-				this.getHoursBilled(),
+				hours,
 				this.getHourlyRate(),
 				serviceCost));
 		return string.toString();

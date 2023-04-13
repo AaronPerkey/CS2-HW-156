@@ -29,6 +29,19 @@ public class Lease extends Equipment{
 		double subtotal = fee * (daysBetween/30.0);
 		return subtotal;
 	}
+
+	@Override
+	public Double getTaxRate() {
+		double tax = 0.00;
+		if(this.fee < 10000) {
+			tax = 0.00;
+		}else if((this.fee >= 10000) || (fee < 100000)) {
+			tax = 500.00;
+		}else if(this.fee >= 100000) {
+			tax = 1500.00;
+		}
+		return tax;
+	}
 	
 	public LocalDate getStartDate() {
 		return StartDate;
@@ -44,19 +57,7 @@ public class Lease extends Equipment{
 		return daysBetween;
 	}
 	
-	@Override
-	public Double getTaxRate() {
-		double tax = 0.00;
-		if(this.fee < 10000) {
-			tax = 0.00;
-		}else if((this.fee >= 10000) || (fee < 100000)) {
-			tax = 500.00;
-		}else if(this.fee >= 100000) {
-			tax = 1500.00;
-		}
-		return tax;
-	}
-	
+
 	public String toString() {
 		StringBuilder string = new StringBuilder();
 		string.append(this.getItemCode() + "  ");
