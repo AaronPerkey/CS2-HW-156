@@ -9,15 +9,23 @@ use aperkey;
 # Date: 2023-03-22
 
 drop table if exists InvoiceItem;
+duse aperkey;
+
+# Computer Science II
+# Assignment 4 -  Project Phase III
+# 
+#This creates tables and inserts data for FMT sales.
+#
+# Name(s): Aaron Perkey, Kyle Gann
+# Date: 2023-03-22
+
+drop table if exists InvoiceItem;
 drop table if exists Invoice;
 drop table if exists Item;
 drop table if exists Store;
 drop table if exists Email;
 drop table if exists Person;
 drop table if exists Address;
-drop table if exists Street;
-drop table if exists ZipCode;
-drop table if exists City;
 drop table if exists State;
 drop table if exists Country;
 
@@ -33,7 +41,9 @@ create table State (
 
 create table Address (
 	addressId int not null primary key auto_increment,
-    address varchar(255) not null,
+    street varchar(255) not null,
+    city varchar(255) not null,
+    zipCode varchar(255) not null,
     stateId int not null,
     countryId int not null,
     foreign key (stateId) references State(stateId),
@@ -110,25 +120,25 @@ insert into State (state) values
 ("OH"), ("IN"), ("AL"), ("MN"),
 ("VA"), ("ND"), ("MD"), ("CO");
 
-insert into Address (address, stateId, countryId) values 
-("123 Cornhusker Way,Lincoln,68508", 1, 1), 
-("4242 A Street,Omaha,68117", 1, 1), 
-("RR9901,Mead,61234", 1, 1),
-("OR5911,Lead North Store,59023", 2, 1),
-("452 13th Street,Hastings,68901", 1, 1),
-("180 Magdeline Plaza,Wichita,67230", 3, 1),
-("601 Lotheville Road,Savannah,31405", 4, 1),
-("0 Havey Avenue,Cleveland,44177", 5, 1),
-("65337 Straubel Place,Muncie,47306", 6, 1),
-("81 Northport Avenue,Mobile,36628", 7, 1),
-("7 Sunbrook Center,Young America,55551", 8, 1),
-("33 Lake View Alley,Roanoke,24040", 9, 1),
-("6811 Pleasure Point,Salinas,93907", 2, 1),
-("37 Hoard Circle,Gravity Falls,75074", 10, 1),
-("40 Aberg Avenue,Fresno,93786", 2, 1),
-("5595 Saint Paul Place,Annapolis,21405", 11, 1),
-("3 5th Junction,Fort Collins,80525", 12, 1),
-("427 Nevada Pass,Toledo,43656", 5, 1);
+insert into Address (street, city, zipCode, stateId, countryId) values 
+("123 Cornhusker Way","Lincoln","68508", 1, 1), 
+("4242 A Street","Omaha","68117", 1, 1), 
+("RR9901","Mead","61234", 1, 1),
+("OR5911","Lead North Store","59023", 2, 1),
+("452 13th Street","Hastings","68901", 1, 1),
+("180 Magdeline Plaza","Wichita","67230", 3, 1),
+("601 Lotheville Road","Savannah","31405", 4, 1),
+("0 Havey Avenue","Cleveland","44177", 5, 1),
+("65337 Straubel Place","Muncie","47306", 6, 1),
+("81 Northport Avenue","Mobile","36628", 7, 1),
+("7 Sunbrook Center","Young America","55551", 8, 1),
+("33 Lake View Alley","Roanoke","24040", 9, 1),
+("6811 Pleasure Point","Salinas","93907", 2, 1),
+("37 Hoard Circle","Gravity Falls","75074", 10, 1),
+("40 Aberg Avenue","Fresno","93786", 2, 1),
+("5595 Saint Paul Place","Annapolis","21405", 11, 1),
+("3 5th Junction","Fort Collins","80525", 12, 1),
+("427 Nevada Pass","Toledo","43656", 5, 1);
 
 insert into Person (personCode, lastName, firstName, addressId) values 
 ("fdc267", "Gann", "Kyle", 7), ("0375b6", "Nonnah", "Gerry", 8), ("aa887a", "Arbuckle", "John", 9), ("cefa4f", "Hilbert", "John", 10),
