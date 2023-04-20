@@ -35,14 +35,16 @@ public class Invoice {
 		this.invoiceId = invoiceId;
 		this.invoiceCode = invoiceCode;
 		this.customer = customer;
+		this.storeCode = storeCode;
 		this.salesperson = salesperson;
 		this.date = date;
 	}
-	
+	// for adding item
 	public Invoice(Invoice invoice1, List<Item> itemList) {
 		this.invoiceId = invoice1.getInvoiceId();
 		this.invoiceCode = invoice1.getInvoiceCode();
 		this.customer = invoice1.getCustomer();
+		this.storeCode = invoice1.getStoreCode();
 		this.salesperson = invoice1.getSalesperson();
 		this.date = invoice1.getDate();
 		this.itemList = itemList;
