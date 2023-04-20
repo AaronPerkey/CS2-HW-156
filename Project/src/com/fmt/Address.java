@@ -1,66 +1,68 @@
 package com.fmt;
-
 /**
- * 
  * A class to model an address
- * 
- * @author Kyle Gann, Aaron Perkey
+ * @author kyleg
  *
  */
-
 public class Address {
 
 	private Integer addressId;
 	private String street;
 	private String city;
-	private String zipCode;
 	private String state;
-	private String country;
+	private String zip;
+	private String county;
 	
-	public Address(String street, String city, String zipCode, String state, String country) {
+	public Address(String street, String city, String state, String zip, String county) {
 		this.street = street;
 		this.city = city;
-		this.zipCode = zipCode;
 		this.state = state;
-		this.country = country;
+		this.zip = zip;
+		this.county = county;
 	}
+	
+	// change to this
+public Address(Integer addressId, String street, String city, String state, String zip, String county) {
+	this.addressId = addressId;
+	this.street = street;
+	this.city = city;
+	this.county = county;
+	this.state = state;
+	this.zip = zip;
+}
 
-	public Address(Integer addressId, String street, String city, String zipCode, String state, 
-			String country) {
-		this.addressId = addressId;
-		this.street = street;
-		this.city = city;
-		this.zipCode = zipCode;
-		this.state = state;
-		this.country = country;
-	}
+public Integer getAddressId() {
+	return addressId;
+}
 
-	public Integer getAddressId() {
-		return addressId;
-	}
 
 	public String getStreet() {
 		return street;
 	}
 
+
 	public String getCity() {
 		return city;
 	}
 
-	public String getZipCode() {
-		return zipCode;
-	}
+
 
 	public String getState() {
 		return state;
 	}
 
-	public String getCountry() {
-		return country;
+
+	public String getZip() {
+		return zip;
 	}
 
+
+	public String getCounty() {
+		return county;
+	}
+	
 	public String getFullAddress() {
-		return this.street + ", \n" + this.city + ", " + this.state + ", " + this.zipCode + ", " + this.country;
+		return this.street + ", \n" + this.city + ", " + this.state + ", " + this.zip + ", " + this.county;
 	}
 	
 }
