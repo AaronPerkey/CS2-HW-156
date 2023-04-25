@@ -18,9 +18,39 @@ public class InvoiceData {
 
 	/**
 	 * Removes all records from all tables in the database.
+	 * Requires multiple queries in URL of connection.
 	 */
 	public static void clearDatabase() {
-		// TODO: implement kyle do this
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String query = """
+				SET FOREIGN_KEY_CHECKS=0; 
+				Delete From Country;
+				Delete From State;
+				Delete From Address;
+				Delete From Person;
+				Delete From Email;
+				Delete From Store;
+				Delete From Invoice;
+				Delete From Item;
+				Delete From InvoiceItem;
+				SET FOREIGN_KEY_CHECKS=1;
+				""";
+		try {
+			ps = null;
+			ps = conn.prepareStatement(query);
+			ps.executeUpdate();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		DatabaseLoader.fullItems = new ArrayList<>();
+		DatabaseLoader.fullPerson = new ArrayList<>();
+		DatabaseLoader.fullInvoices = new ArrayList<>();
+		DatabaseLoader.fullStore = new ArrayList<>();
+		DatabaseLoader.fullInvoiceItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 
 	}
 
