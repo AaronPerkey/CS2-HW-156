@@ -32,7 +32,7 @@ create table Address (
 	addressId int not null primary key auto_increment,
     street varchar(255) not null,
     city varchar(255) not null,
-    zipCode varchar(255) not null,
+    zip varchar(255) not null,
     stateId int not null,
     countryId int not null,
     foreign key (stateId) references State(stateId),
@@ -109,7 +109,7 @@ insert into State (state) values
 ("OH"), ("IN"), ("AL"), ("MN"),
 ("VA"), ("ND"), ("MD"), ("CO");
 
-insert into Address (street, city, zipCode, stateId, countryId) values 
+insert into Address (street, city, zip, stateId, countryId) values 
 ("123 Cornhusker Way","Lincoln","68508", 1, 1), 
 ("4242 A Street","Omaha","68117", 1, 1), 
 ("RR9901","Mead","61234", 1, 1),
