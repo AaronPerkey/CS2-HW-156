@@ -65,9 +65,7 @@ public class Store {
 	}
 	
 	public static Integer getStore(String storeCode) {
-		
 		Integer storeId = -1;
-		
 		try {
 			Connection conn = DatabaseInfo.openConnectSQL();
 			String query0 = "select storeId from Store where storeCode = ?;";
@@ -98,8 +96,9 @@ public class Store {
 			String manager = this.getManagerCode().getFullName();
 			Double grandTotal = this.getGrandTotal();
 			int sales = 0;
-			if (this.getInvoiceList() != null ) {
-				sales = this.getInvoiceList().size();
+			List<Invoice> invoices = this.getInvoiceList();
+			if (invoices != null ) {
+				sales = invoices.size();
 			}
 
 			totalGrandTotal += grandTotal;

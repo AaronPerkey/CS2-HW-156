@@ -1,5 +1,10 @@
 package com.fmt;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * 
  * Models a service
@@ -49,6 +54,33 @@ public class Service extends Item{
 	@Override
 	public Double getHoursBilled() {
 		return hoursBilled;
+	}
+	/**
+	 * A method to get a service based on its code
+	 * @param code
+	 * @return Integer
+	 */
+	public static Integer getService(String code) {
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Integer itemId = -1;
+		try {
+
+			String query0 = "SELECT itemId, itemCode, name, unit, price FROM Item WHERE typeOfSale = ? and itemCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, "S");
+			ps.setString(2, code);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				itemId = rs.getInt("itemId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return itemId;
 	}
 	
 	public String toString() {

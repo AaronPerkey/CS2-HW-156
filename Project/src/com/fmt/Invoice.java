@@ -107,6 +107,7 @@ public class Invoice {
 		return invoiceId;
 	}
 
+
 public Double getInvoiceTotal() {
 	if (this.getItemList().size() > 0) {
 		int numItems = this.getItemList().size();
@@ -172,6 +173,7 @@ public Double getTax() {
 
 public String toString () {
 	StringBuilder string = new StringBuilder();
+	//
 	
 	String invoiceCode = this.getInvoiceCode();
 	string.append("\nInvoice  #" + invoiceCode);

@@ -19,25 +19,26 @@ import org.apache.logging.log4j.Logger;
  */
 
 public class DatabaseLoader {
-	
+
 	public static List<Person> fullPerson = new ArrayList<>();
 	public static List<Store> fullStore = new ArrayList<>();
 	public static List<Invoice> fullInvoices = new ArrayList<>();
 	public static List<Item> fullItems = new ArrayList<>();
 	public static List<Item> fullInvoiceItems = new ArrayList<>();
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseInfo.class);
+
 	/**
 	 * Loads a person from the sql database
 	 * 
 	 * @return List of people
 	 */
 	public static List<Person> loadPersons() {
-		
+
 		if (fullPerson.size() != 0) {
 			return fullPerson;
 		}
-		
+
 		Connection conn = DatabaseInfo.openConnectSQL();
 
 		PreparedStatement ps = null;
@@ -63,7 +64,7 @@ public class DatabaseLoader {
 				Integer addressId = rs.getInt("addressId");
 				String street = rs.getString("Address.street");
 				String city = rs.getString("Address.city");
-				String zip = rs.getString("Address.zip");
+				String zipCode = rs.getString("Address.zip");
 				String state = rs.getString("State.state");
 				String country = rs.getString("Country.country");
 
@@ -80,104 +81,88 @@ public class DatabaseLoader {
 				}
 				rsj.close();
 				psj.close();
-				Address a = new Address(addressId, street, city, zip, state, country);
+				Address a = new Address(addressId, street, city, zipCode, state, country);
 				e = new Person(personId, personCode, firstName, lastName, a, email);
 				fullPerson.add(e);
 			}
-			rs.close();
-			ps.close();
 		} catch (SQLException e) {
 			System.out.println("SQLException: could not run person queries");
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: Could not close connection, something is very wrong");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		DatabaseInfo.closeConnection(conn, ps, rs);
 		LOGGER.info("Done loading persons");
 		return fullPerson;
 
 	}
-	
+
 	/**
 	 * Loads a Item from the sql database
 	 * 
 	 * @return List of items
 	 */
-  	public static List<Item> loadItem() {
+	public static List<Item> loadItem() {
 
-  		if (fullItems.size() != 0) {
+		if (fullItems.size() != 0) {
 			return fullItems;
 		}
-  		
-  		
-  		Connection conn = DatabaseInfo.openConnectSQL();
-  
-  		Item i = null;
-  		PreparedStatement ps = null;
-  		ResultSet rs = null;
-  		String itemQuery = """ 
-  				select itemId, itemCode, typeOfSale, name, unit, model, price,
-  					hourlyRate from Item;
-  			 """;
-  		try {
-  			ps = conn.prepareStatement(itemQuery);
-  			rs = ps.executeQuery();
-  			while (rs.next()) {
-  				Integer itemId = rs.getInt("itemId");
-  				String itemCode = rs.getString("itemCode");
-  				String typeOfSale = rs.getString("typeOfSale");
-  				String name = rs.getString("name");
-  				String unit = rs.getString("unit");
-  				String model = rs.getString("model");
-  				Double price = rs.getDouble("price");
-  				Double hourlyRate = rs.getDouble("hourlyRate");
-  				if (typeOfSale.equals("E")) {
-  					i = new Equipment(itemId, itemCode, name, model);
-  				}
-  				if (typeOfSale.equals("P")) {
-  					i = new Product(itemId, itemCode, name, unit, price);
-  				}
-  				if (typeOfSale.equals("S")) {
-  					i = new Service(itemId, itemCode, name, hourlyRate);
-  				}
-  				fullItems.add(i);
-  			}
-  			rs.close();
-  			ps.close();
-  			conn.close();
-  		} catch (SQLException e) {
-  			System.out.println("SQLException: ");
-  			e.printStackTrace();
-  			throw new RuntimeException(e);
-  		}
-  
-  		try {
-  			if (rs != null && !rs.isClosed())
-  				rs.close();
-  			if (ps != null && !ps.isClosed())
-  				ps.close();
-  			if (conn != null && !conn.isClosed())
-  				conn.close();
-  		} catch (SQLException e) {
-  			System.out.println("SQLException: ");
-  			e.printStackTrace();
-  			throw new RuntimeException(e);
-  		}
-  
-  		LOGGER.info("Done loading items");
-  		return fullItems;
-  	}
+
+		Connection conn = DatabaseInfo.openConnectSQL();
+
+		Item i = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String itemQuery = """
+				select itemId, itemCode, typeOfSale, name, unit, model, price,
+					hourlyRate from Item;
+				""";
+		try {
+			ps = conn.prepareStatement(itemQuery);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				Integer itemId = rs.getInt("itemId");
+				String itemCode = rs.getString("itemCode");
+				String typeOfSale = rs.getString("typeOfSale");
+				String name = rs.getString("name");
+				String unit = rs.getString("unit");
+				String model = rs.getString("model");
+				Double price = rs.getDouble("price");
+				Double hourlyRate = rs.getDouble("hourlyRate");
+				if (typeOfSale.equals("E")) {
+					i = new Equipment(itemId, itemCode, name, model);
+				}
+				if (typeOfSale.equals("P")) {
+					i = new Product(itemId, itemCode, name, unit, price);
+				}
+				if (typeOfSale.equals("S")) {
+					i = new Service(itemId, itemCode, name, hourlyRate);
+				}
+				fullItems.add(i);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+		DatabaseInfo.closeConnection(conn, ps, rs);
+
+		LOGGER.info("Done loading items");
+		return fullItems;
+	}
+
+	public static Person getPerson(int personId) {
+
+		List<Person> persons = loadPersons();
+		Person person = null;
+		for (Person dude : persons) {
+			if (dude.getPersonId().equals(personId)) {
+				person = dude;
+			}
+		}
+		return person;
+	}
 
 	/**
 	 * Loads a Store from the sql database
@@ -185,19 +170,19 @@ public class DatabaseLoader {
 	 * @return List of stores
 	 */
 	public static List<Store> loadStore() {
-		
+
 		if (fullStore.size() != 0) {
 			return fullStore;
 		}
-		
+
 		Person perosnConnection = null;
 		Connection conn = DatabaseInfo.openConnectSQL();
 
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String storeQuery = """
-				select Store.storeId, Store.storeCode, Store.managerId, Address.addressId, 
-					Address.street, Address.city, Address.zip, State.state, 
+				select Store.storeId, Store.storeCode, Store.managerId, Address.addressId,
+					Address.street, Address.city, Address.zip, State.state,
 					Country.country from Store
 					join Address on Address.addressId = Store.addressId
 					join State on State.stateId = Address.stateId
@@ -215,53 +200,37 @@ public class DatabaseLoader {
 				Integer addressId = rs.getInt("Address.addressId");
 				String street = rs.getString("Address.street");
 				String city = rs.getString("Address.city");
-				String zip = rs.getString("Address.zip");
+				String zipCode = rs.getString("Address.zip");
 				String state = rs.getString("State.state");
 				String country = rs.getString("Country.country");
-				perosnConnection = Person.getPerson(managerId);
-				Address a = new Address(addressId, street, city, zip, state, country);
+				perosnConnection = getPerson(managerId);
+				Address a = new Address(addressId, street, city, zipCode, state, country);
 				Store s = new Store(storeId, storeCode, perosnConnection, a);
 				Store completeStore = getStoreInvoices(s);
 				fullStore.add(completeStore);
 			}
-			rs.close();
-			ps.close();
-			conn.close();
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: ");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		DatabaseInfo.closeConnection(conn, ps, rs);
 
 		LOGGER.info("Done loading stores");
 		return fullStore;
 	}
-	
+
 	/**
 	 * Loads a Invoice from the sql database
 	 * 
 	 * @return List of invoices
 	 */
 	public static List<Invoice> loadInvoice() {
-		
+
 		if (fullInvoices.size() != 0) {
 			return fullInvoices;
 		}
-		
-		
 
 		Integer invoiceId = 0;
 		Person customerConnection;
@@ -271,7 +240,7 @@ public class DatabaseLoader {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String storeQuery = """
-				select Invoice.invoiceId, Invoice.invoiceCode, Invoice.customerId, 
+				select Invoice.invoiceId, Invoice.invoiceCode, Invoice.customerId,
 					Invoice.salesPersonId, Store.storeCode,date from Store
 					join Invoice on Invoice.storeId = Store.storeId;
 				""";
@@ -286,34 +255,21 @@ public class DatabaseLoader {
 				String storeCode = rs.getString("storeCode");
 				int salespersonId = rs.getInt("salesPersonId");
 				String datePurchased = rs.getString("date");
-				customerConnection = Person.getPerson(customerId);
-				salesPerosnConnection = Person.getPerson(salespersonId);
+				customerConnection = getPerson(customerId);
+				salesPerosnConnection = getPerson(salespersonId);
 
-				Invoice i = new Invoice(invoiceId, invoiceCode, storeCode, customerConnection, salesPerosnConnection, datePurchased);
+				Invoice i = new Invoice(invoiceId, invoiceCode, storeCode, customerConnection, salesPerosnConnection,
+						datePurchased);
 				Invoice completeInvoice = getListInvoiceItems(i);
 				fullInvoices.add(completeInvoice);
 			}
-			rs.close();
-			ps.close();
-			conn.close();
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: ");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		DatabaseInfo.closeConnection(conn, ps, rs);
 
 		LOGGER.info("done loading invoices");
 		return fullInvoices;
@@ -328,7 +284,7 @@ public class DatabaseLoader {
 		if (fullInvoiceItems.size() != 0) {
 			return fullInvoiceItems;
 		}
-		
+
 		Integer itemId = 0;
 		String typeOfBuy = null;
 		Double price = 0.0;
@@ -348,12 +304,12 @@ public class DatabaseLoader {
 
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String invoiceItemsQuery = """	
-			select InvoiceItems.itemId, Invoice.invoiceCode, InvoiceItems.typeOfBuy, InvoiceItems.price, Item.price as unitPrice,
-                InvoiceItems.quantity, InvoiceItems.hoursBilled, InvoiceItems.startDate, endDate from Invoice
-                join InvoiceItems on InvoiceItems.invoiceId = Invoice.invoiceId
-                join Item on Item.itemId = InvoiceItems.itemId;
-				""";
+		String invoiceItemsQuery = """
+				select InvoiceItems.itemId, Invoice.invoiceCode, InvoiceItems.typeOfBuy, InvoiceItems.price, Item.price as unitPrice,
+				             InvoiceItems.quantity, InvoiceItems.hoursBilled, InvoiceItems.startDate, endDate from Invoice
+				             join InvoiceItems on InvoiceItems.invoiceId = Invoice.invoiceId
+				             join Item on Item.itemId = InvoiceItems.itemId;
+					""";
 		try {
 			ps = conn.prepareStatement(invoiceItemsQuery);
 			rs = ps.executeQuery();
@@ -369,8 +325,7 @@ public class DatabaseLoader {
 				hoursBilled = rs.getDouble("hoursBilled");
 				String startDateS = rs.getString("startDate");
 				String endDateS = rs.getString("endDate");
-				
-				
+
 				for (Item x : item) {
 					if (x.getItemId().equals(itemId)) {
 						itemCode = x.getItemCode();
@@ -380,7 +335,7 @@ public class DatabaseLoader {
 						hourlyRate = x.getHourlyRate();
 					}
 				}
-				
+
 				if (typeOfBuy != null) {
 					if (typeOfBuy.equals("P")) {
 
@@ -391,55 +346,41 @@ public class DatabaseLoader {
 						i = new Lease(itemId, itemCode, name, model, price, startDate, endDate, invoiceCode);
 					}
 				}
-				
-					if (hoursBilled.equals(0.0) && typeOfBuy == null) {
-						Product i1 = new Product(itemId, itemCode, name, unit, unitPrice);
-						i = new Product(i1, quantity, invoiceCode);
-					} else if (hoursBilled != 0.0 && typeOfBuy == null) {
-						Service i1 = new Service(itemId, itemCode, name, hourlyRate);
-						i = new Service(i1, hoursBilled, invoiceCode);
-					}
+
+				if (hoursBilled.equals(0.0) && typeOfBuy == null) {
+					Product i1 = new Product(itemId, itemCode, name, unit, unitPrice);
+					i = new Product(i1, quantity, invoiceCode);
+				} else if (hoursBilled != 0.0 && typeOfBuy == null) {
+					Service i1 = new Service(itemId, itemCode, name, hourlyRate);
+					i = new Service(i1, hoursBilled, invoiceCode);
+				}
 				fullInvoiceItems.add(i);
 			}
-			rs.close();
-			ps.close();
-			conn.close();
+
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: ");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		DatabaseInfo.closeConnection(conn, ps, rs);
 
 		LOGGER.info("Done loading invoiceItems");
 		return fullInvoiceItems;
 	}
-	
+
 	/**
 	 * takes in a storeId, without its invoices, returns the store with the invoices
 	 * 
 	 * @return List of invoices of a certain store
 	 */
 	public static Store getStoreInvoices(Store store) {
-		
+
 		List<Invoice> invoiceList = new ArrayList<>();
 		Invoice invoice = null;
 		List<Invoice> invoices = loadInvoice();
 		Store s = null;
 		Connection conn = DatabaseInfo.openConnectSQL();
-		
 
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -454,16 +395,14 @@ public class DatabaseLoader {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Integer invoiceId = rs.getInt("Invoice.invoiceId");
-			
 				for (Invoice recept : invoices) {
 					if (recept.getInvoiceId().equals(invoiceId)) {
 						invoice = recept;
-					}
+					}	
+				}
+				
 				invoiceList.add(invoice);
-				}	
-				
-				
-				
+
 			}
 			s = new Store(store, invoiceList);
 			rs.close();
@@ -474,22 +413,10 @@ public class DatabaseLoader {
 			throw new RuntimeException(e);
 		}
 
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: Could not close connection, something is very wrong");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		
+		DatabaseInfo.closeConnection(conn, ps, rs);
+
 		return s;
 	}
-
 
 	/**
 	 * Connects items with there corresponding invoice
@@ -497,7 +424,7 @@ public class DatabaseLoader {
 	 * @return List of items of a certain invoice
 	 */
 	public static Invoice getListInvoiceItems(Invoice invoice) {
-		
+
 		Invoice s = null;
 		List<Item> itemList = new ArrayList<>();
 		Item item = null;
@@ -507,9 +434,9 @@ public class DatabaseLoader {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String itemInvoicesQuery = """
-    			select Item.itemId from Invoice
+							select Item.itemId, InvoiceItems.endDate from Invoice
 					join InvoiceItems on InvoiceItems.invoiceId = Invoice.invoiceId
-                    join Item on Item.itemId = InvoiceItems.itemId
+					join Item on Item.itemId = InvoiceItems.itemId
 				    where Invoice.invoiceId = ?;
 				""";
 		try {
@@ -518,68 +445,44 @@ public class DatabaseLoader {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Integer itemId = rs.getInt("Item.itemId");
+				String endDate = rs.getString("endDate");
 				for (Item thing : items) {
 					Integer itemIdf = thing.getItemId();
-					if (itemIdf.equals(itemId)) {
-						item = thing;
+					String itemT = null;
+					
+					// cannot do .equals to a null value so skip it if they are null
+					// then check separately with a == operator
+					if (thing.getEndDate() != null) {
+						itemT = thing.getEndDate().toString();
+					}
+					if ((itemT == null || endDate == null)) {
+						if (itemIdf.equals(itemId) && itemT == endDate) {
+							item = thing;
+						}
+					} else {
+						if (itemT.equals(endDate)) {
+							if (itemIdf.equals(itemId)) {
+								item = thing;
+							}
+						}
 					}
 				}
-					
+
 				itemList.add(item);
-					
-				
-				
+
 			}
 			s = new Invoice(invoice, itemList);
-			rs.close();
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: could not run person queries");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
 
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: Could not close connection, something is very wrong");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		return s;
+		}catch(
+
+	SQLException e)
+	{
+		System.out.println("SQLException: could not run person queries");
+		e.printStackTrace();
+		throw new RuntimeException(e);
 	}
-//	
-//	public static void main(String[] args) {
-//		List<Person> persons = loadPersons();
-//
-//		for (int i = 0; i < persons.size(); i++) {
-//			System.out.println(persons.get(i).toString());
-//		}
-//		
-//		List<Item> items = loadItem();
-//
-//		for (int i = 0; i < items.size(); i++) {
-//			System.out.println(items.get(i).toString());
-//		}
-//		List<Store> stores = loadStore();
-////		List<Invoice> invoices = loadInvoice();
-//		System.out.println(loadInvoiceItems().toString());
-//
-//	for (int i = 0; i < stores.size(); i++) {
-//		System.out.println(stores.get(i).toString());
-//		}
-//		
-////	int size = invoices.size();
-////		for (int i = 0; i < size; i++) {
-////			System.out.println(invoices.get(i));
-////		}
-//		
-//		
-//
-//	}
+
+	DatabaseInfo.closeConnection(conn,ps,rs);return s;
+}
+
 }

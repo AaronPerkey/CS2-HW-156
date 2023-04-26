@@ -11,13 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * 
  * This is the main driver program that parses the data file and
  *
- * @author Kyle Gann, Aaron Perkey
- *
  */
-
 public class DataConverter {
 
 	public static List<Item> parseDataFileItem(String file) {
@@ -208,7 +204,7 @@ public class DataConverter {
 							if (invoiceItems.get(index).getClass().getSimpleName().equals("Purchase")) {
 
 								Purchase invoiceCode = new Purchase(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getUnitPrice(), invoiceItems.get(index).getInvoiceCode());
+										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getPrice(), invoiceItems.get(index).getInvoiceCode());
 								
 								invoiceCodes.add(invoiceCode);
 								invoiceItems.remove(index);
@@ -235,7 +231,7 @@ public class DataConverter {
 							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Product")) {
 								
 								Product invoiceCode1 = new Product(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(), invoiceItems.get(index).getUnit(), invoiceItems.get(index).getUnitPrice());
+										invoiceItems.get(index).getName(), invoiceItems.get(index).getUnit(), invoiceItems.get(index).getPrice());
 								Product invoiceCode = new Product(invoiceCode1, invoiceItems.get(index).getQuantity(), invoiceItems.get(index).getInvoiceCode());
 								invoiceCodes.add(invoiceCode);
 								
@@ -314,10 +310,10 @@ public class DataConverter {
 							Product key = new Product(tokens[1]);
 							int index = Collections.binarySearch(items, key, byId);
 							Product item = new Product(tokens[1], items.get(index).getName(),
-									items.get(index).getUnit(), items.get(index).getUnitPrice());
+									items.get(index).getUnit(), items.get(index).getPrice());
 							int amount = Integer.parseInt(tokens[2]);
 							String name = item.getName();
-							Product product = new Product(itemCode, name, item.getUnit(), item.getUnitPrice());
+							Product product = new Product(itemCode, name, item.getUnit(), item.getPrice());
 							
 							e = new Product(product, amount, invoiceCode);
 						}

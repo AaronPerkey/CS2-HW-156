@@ -1,13 +1,12 @@
 package com.fmt;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This is a collection of utility methods that define a general API for
@@ -20,7 +19,35 @@ public class InvoiceData {
 	 * Removes all records from all tables in the database.
 	 */
 	public static void clearDatabase() {
-    //TODO: implement
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String query = """
+				SET FOREIGN_KEY_CHECKS=0;
+				Delete From Country;
+				Delete From State;
+				Delete From Address;
+				Delete From Person;
+				Delete From Email;
+				Delete From Store;
+				Delete From Invoice;
+				Delete From Item;
+				Delete From InvoiceItem;
+				SET FOREIGN_KEY_CHECKS=1;
+				""";
+		try {
+			ps = null;
+			ps = conn.prepareStatement(query);
+			ps.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		DatabaseLoader.fullItems = new ArrayList<>();
+		DatabaseLoader.fullPerson = new ArrayList<>();
+		DatabaseLoader.fullInvoices = new ArrayList<>();
+		DatabaseLoader.fullStore = new ArrayList<>();
+		DatabaseLoader.fullInvoiceItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 
 	}
 
@@ -35,7 +62,7 @@ public class InvoiceData {
 	 * @return
 	 */
 	public static Integer getAddress(String street, String city, String state, String zip, String country) {
-		
+
 		Integer countryId = -1;
 		Integer stateId = -1;
 		Integer addressId = -1;
@@ -47,7 +74,7 @@ public class InvoiceData {
 			ps0 = conn.prepareStatement(query0);
 			ps0.setString(1, country);
 			ResultSet rs0 = ps0.executeQuery();
-			if(rs0.next()) {
+			if (rs0.next()) {
 				countryId = rs0.getInt("countryId");
 			}
 			DatabaseInfo.closeConnection(conn, ps0, rs0);
@@ -56,8 +83,8 @@ public class InvoiceData {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		
-		if(countryId == -1) {
+
+		if (countryId == -1) {
 
 			try {
 				Connection conn = DatabaseInfo.openConnectSQL();
@@ -85,7 +112,7 @@ public class InvoiceData {
 			ps = conn.prepareStatement(query0);
 			ps.setString(1, state);
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				stateId = rs.getInt("stateId");
 			}
 			DatabaseInfo.closeConnection(conn, ps, rs);
@@ -94,8 +121,8 @@ public class InvoiceData {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		
-		if(stateId == -1) {
+
+		if (stateId == -1) {
 
 			try {
 				Connection conn = DatabaseInfo.openConnectSQL();
@@ -115,33 +142,32 @@ public class InvoiceData {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		try {
-		Connection conn = DatabaseInfo.openConnectSQL();
-		PreparedStatement ps = null;
-		String createPersonQuery = "insert into Address (street, city, zip, stateId, countryId) values (?,?,?,?,?);";
-		ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
-		ps.setString(1, street);
-		ps.setString(2, city);
-		ps.setString(3, zip);
-		ps.setInt(4, stateId);
-		ps.setInt(5, countryId);
-		ps.executeUpdate();
-		// get the generated keys:
-		ResultSet keys = ps.getGeneratedKeys();
-		keys.next();
-		int key = keys.getInt(1);
-		addressId = key;
-		DatabaseInfo.closeConnection(conn, ps, keys);
-		}catch (SQLException e) {
-		System.out.println("SQLException: ");
-		e.printStackTrace();
-		throw new RuntimeException(e);
+			Connection conn = DatabaseInfo.openConnectSQL();
+			PreparedStatement ps = null;
+			String createPersonQuery = "insert into Address (street, city, zip, stateId, countryId) values (?,?,?,?,?);";
+			ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, zip);
+			ps.setInt(4, stateId);
+			ps.setInt(5, countryId);
+			ps.executeUpdate();
+			// get the generated keys:
+			ResultSet keys = ps.getGeneratedKeys();
+			keys.next();
+			int key = keys.getInt(1);
+			addressId = key;
+			DatabaseInfo.closeConnection(conn, ps, keys);
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return addressId;
 	}
 
-	
 	/**
 	 * Method to add a person record to the database with the provided data.
 	 *
@@ -154,50 +180,49 @@ public class InvoiceData {
 	 * @param zip
 	 * @param country
 	 */
-	
-	public static void addPerson(String personCode, String firstName, String lastName, String street,
-			String city, String state, String zip, String country) {
-		
-		if(personCode == null || firstName == null || lastName == null || street == null || 
-				city == null || state == null || zip == null || country == null) {
+
+	public static void addPerson(String personCode, String firstName, String lastName, String street, String city,
+			String state, String zip, String country) {
+
+		if (personCode == null || firstName == null || lastName == null || street == null || city == null
+				|| state == null || zip == null || country == null) {
 			throw new IllegalArgumentException("Invalid person data. (one of the veriables equal null)");
 		}
-		
-		Integer personId = Person.getPerson(personCode);
-		
-		if(personId == -1) {
-			
-			Integer addressId = getAddress(street, city, state, zip, country);
-			
-  			try {
-  			Connection conn = DatabaseInfo.openConnectSQL();
-  			PreparedStatement ps = null;
-  			String createPersonQuery = "insert into Person (personCode, lastName, firstName, addressId) values (?,?,?,?);";
-			ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, personCode);
-			ps.setString(2, lastName);
-			ps.setString(3, firstName);
-			ps.setInt(4, addressId);
-			ps.executeUpdate();
-			
-			// get the generated keys:
-			ResultSet keys = ps.getGeneratedKeys();
-			keys.next();
-			int key = keys.getInt(1);
-			addressId = key;
-			DatabaseInfo.closeConnection(conn, ps, keys);
-  			}catch (SQLException e) {
-  			System.out.println("SQLException: ");
-  			e.printStackTrace();
-  			throw new RuntimeException(e);
-  			}
-  			DatabaseLoader.fullPerson = new ArrayList<>();
-		} else {
-			throw new IllegalArgumentException("Person already exsists.");
-		}
 
+		Integer personId = Person.getPerson(personCode);
+
+		if (personId == -1) {
+
+			Integer addressId = getAddress(street, city, state, zip, country);
+			Connection conn = DatabaseInfo.openConnectSQL();
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+
+				String createPersonQuery = "insert into Person (personCode, lastName, firstName, addressId) values (?,?,?,?);";
+				ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, personCode);
+				ps.setString(2, lastName);
+				ps.setString(3, firstName);
+				ps.setInt(4, addressId);
+				ps.executeUpdate();
+
+				// get the generated keys:
+				rs = ps.getGeneratedKeys();
+				rs.next();
+				int key = rs.getInt(1);
+				addressId = key;
+				DatabaseInfo.closeConnection(conn, ps, rs);
+			} catch (SQLException e) {
+				System.out.println("SQLException: ");
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			DatabaseLoader.fullPerson = new ArrayList<>();
+			DatabaseInfo.closeConnection(conn, ps, rs);
+		}
 	}
-		
+
 	/**
 	 * Adds an email record corresponding person record corresponding to the
 	 * provided <code>personCode</code>
@@ -206,32 +231,49 @@ public class InvoiceData {
 	 * @param email
 	 */
 	public static void addEmail(String personCode, String email) {
-		
-		Integer personId = Person.getPerson(personCode);
-		Person person = Person.getPerson(personId);
 
-		if(personId == -1) {
+		Integer personId = Person.getPerson(personCode);
+
+		if (personId == -1) {
 			throw new IllegalArgumentException("This person does not exist in the database.");
 		}
-		
-			try {
-			Connection conn = DatabaseInfo.openConnectSQL();
-			PreparedStatement ps = null;
-			ResultSet rs = null;
-			String createPersonQuery = "insert into Email (personId, address) values (?,?);";
-		ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
-		ps.setInt(1, personId);
-		ps.setString(2, email);
-		ps.executeUpdate();
-		DatabaseInfo.closeConnection(conn, ps, rs);
-			}catch (SQLException e) {
+
+		Integer emailId = -1;
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+
+			String query0 = "Select emailId from Email WHERE address = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, email);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				emailId = rs.getInt("emailId");
+			}
+		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
 			throw new RuntimeException(e);
+		}
+		if (emailId == -1) {
+			try {
+				ps = null;
+				rs = null;
+				String createPersonQuery = "insert into Email (personId, address) values (?,?);";
+				ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
+				ps.setInt(1, personId);
+				ps.setString(2, email);
+				ps.executeUpdate();
+
+			} catch (SQLException e) {
+				System.out.println("SQLException: ");
+				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
-			List<String> emails = person.getEmail();
-			emails.add(email);
+			DatabaseInfo.closeConnection(conn, ps, rs);
 			DatabaseLoader.fullPerson = new ArrayList<>();
+		}
 	}
 
 	/**
@@ -248,49 +290,47 @@ public class InvoiceData {
 	 */
 	public static void addStore(String storeCode, String managerCode, String street, String city, String state,
 			String zip, String country) {
-		
-		if(storeCode == null || managerCode == null || street == null || city == null || state == null 
-				|| zip == null || country == null) {
+
+		if (storeCode == null || managerCode == null || street == null || city == null || state == null || zip == null
+				|| country == null) {
 			throw new IllegalArgumentException("Invalid store data. (one of the veriables equal null)");
 		}
-		
+
 		Integer storeId = Store.getStore(storeCode);
-		
-		if(storeId == -1) {
-			
+
+		if (storeId == -1) {
+
 			Integer managerId = Person.getPerson(managerCode);
-			
-			if(managerId == -1) {
+
+			if (managerId == -1) {
 				throw new IllegalArgumentException("Person does not exsist.");
 			}
-			
+
 			Integer addressId = getAddress(street, city, state, zip, country);
-			
-  			try {
-  			Connection conn = DatabaseInfo.openConnectSQL();
-  			PreparedStatement ps = null;
-  			ResultSet rs = null;
-  			String createPersonQuery = "insert into Store (storeCode, managerId, addressId) values (?,?,?);";
-			ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, storeCode);
-			ps.setInt(2, managerId);
-			ps.setInt(3, addressId);
-			ps.executeUpdate();
-			DatabaseInfo.closeConnection(conn, ps, rs);
-  			}catch (SQLException e) {
-  			System.out.println("SQLException: ");
-  			e.printStackTrace();
-  			throw new RuntimeException(e);
-  			}
-		} else {
-			throw new IllegalArgumentException("Store already exsists.");
+
+			try {
+				Connection conn = DatabaseInfo.openConnectSQL();
+				PreparedStatement ps = null;
+				ResultSet rs = null;
+				String createPersonQuery = "insert into Store (storeCode, managerId, addressId) values (?,?,?);";
+				ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, storeCode);
+				ps.setInt(2, managerId);
+				ps.setInt(3, addressId);
+				ps.executeUpdate();
+				DatabaseInfo.closeConnection(conn, ps, rs);
+			} catch (SQLException e) {
+				System.out.println("SQLException: ");
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			DatabaseLoader.fullStore = new ArrayList<>();
 		}
-		
 	}
 
 	/**
-	 * Adds a product record to the database with the given <code>code</code>, <code>name</code> and
-	 * <code>unit</code> and <code>pricePerUnit</code>.
+	 * Adds a product record to the database with the given <code>code</code>,
+	 * <code>name</code> and <code>unit</code> and <code>pricePerUnit</code>.
 	 *
 	 * @param itemCode
 	 * @param name
@@ -298,8 +338,36 @@ public class InvoiceData {
 	 * @param pricePerUnit
 	 */
 	public static void addProduct(String code, String name, String unit, double pricePerUnit) {
-    //TODO: implement
+		if (code == null || name == null || unit == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
+		Integer itemId = Product.getProduct(code);
+		if (itemId == -1) {
+			String query = "insert into Item (itemCode, typeOfSale, name, unit, model, price, hourlyRate) values (?,?,?,?,?,?,?);";
+
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setString(1, code);
+				ps.setString(2, "P");
+				ps.setString(3, name);
+				ps.setString(4, unit);
+				ps.setString(5, null);
+				ps.setDouble(6, pricePerUnit);
+				ps.setString(7, null);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		DatabaseLoader.fullItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -311,9 +379,38 @@ public class InvoiceData {
 	 * @param modelNumber
 	 */
 	public static void addEquipment(String code, String name, String modelNumber) {
-    //TODO: implement
+		
+		if (code == null || name == null || modelNumber == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Integer itemId = Equipment.getEquippment(code);
+		if (itemId == -1) {
+			String query = "insert into Item (itemCode, typeOfSale, name, unit, model, price, hourlyRate) values (?,?,?,?,?,?,?);";
 
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setString(1, code);
+				ps.setString(2, "E");
+				ps.setString(3, name);
+				ps.setString(4, null);
+				ps.setString(5, modelNumber);
+				ps.setString(6, null);
+				ps.setString(7, null);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		DatabaseLoader.fullItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 	}
+	
 
 	/**
 	 * Adds a service record to the database with the given <code>code</code>,
@@ -324,9 +421,52 @@ public class InvoiceData {
 	 * @param modelNumber
 	 */
 	public static void addService(String code, String name, double costPerHour) {
-    //TODO: implement
+		if (code == null || name == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Integer itemId = Service.getService(code);
+		try {
 
+			String query0 = "SELECT itemId, itemCode, name, unit, price FROM Item WHERE typeOfSale = ? and itemCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, "S");
+			ps.setString(2, code);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				itemId = rs.getInt("itemId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		if (itemId == -1) {
+			String query = "insert into Item (itemCode, typeOfSale, name, unit, model, price, hourlyRate) values (?,?,?,?,?,?,?);";
+
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setString(1, code);
+				ps.setString(2, "S");
+				ps.setString(3, name);
+				ps.setString(4, null);
+				ps.setString(5, null);
+				ps.setString(6, null);
+				ps.setDouble(7, costPerHour);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		DatabaseLoader.fullItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 	}
+	
 
 	/**
 	 * Adds an invoice record to the database with the given data.
@@ -335,57 +475,56 @@ public class InvoiceData {
 	 * @param storeCode
 	 * @param customerCode
 	 * @param salesPersonCode
-   * @param invoiceDate
+	 * @param invoiceDate
 	 */
-	public static void addInvoice(String invoiceCode, String storeCode, String customerCode, String salesPersonCode, String invoiceDate) {
-    
+	public static void addInvoice(String invoiceCode, String storeCode, String customerCode, String salesPersonCode,
+			String invoiceDate) {
 
-		
-		if(invoiceCode == null || storeCode == null || customerCode == null || salesPersonCode == null || invoiceDate == null) {
+		if (invoiceCode == null || storeCode == null || customerCode == null || salesPersonCode == null
+				|| invoiceDate == null) {
 			throw new IllegalArgumentException("Invalid invoice data. (one of the veriables equal null)");
 		}
-		
+
 		Integer invoiceId = Invoice.getInvoice(invoiceCode);
-		
-		if(invoiceId == -1) {
-			
+
+		if (invoiceId == -1) {
+
 			Integer storeId = Store.getStore(storeCode);
 			Integer salesPersonId = Person.getPerson(salesPersonCode);
 			Integer customerId = Person.getPerson(customerCode);
-			
-			if(storeId == -1) {
+
+			if (storeId == -1) {
 				throw new IllegalArgumentException("Store does not exsist.");
 			}
-			if(salesPersonId == -1 || customerId == -1) {
+			if (salesPersonId == -1 || customerId == -1) {
 				throw new IllegalArgumentException("One of the people does not exsist.");
 			}
-			
-  			try {
-  			Connection conn = DatabaseInfo.openConnectSQL();
-  			PreparedStatement ps = null;
-  			ResultSet rs = null;
-  			String createPersonQuery = "insert into Invoice (invoiceCode, storeId, customerId, salesPersonId, date) values (?,?,?,?,?);";
-			ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, invoiceCode);
-			ps.setInt(2, storeId);
-			ps.setInt(3, customerId);
-			ps.setInt(4, salesPersonId);
-			ps.setString(5, invoiceDate);
-			ps.executeUpdate();
-			DatabaseInfo.closeConnection(conn, ps, rs);
-  			}catch (SQLException e) {
-  			System.out.println("SQLException: ");
-  			e.printStackTrace();
-  			throw new RuntimeException(e);
-  			}
-		} else {
-			throw new IllegalArgumentException("Store already exsists.");
+
+			try {
+				Connection conn = DatabaseInfo.openConnectSQL();
+				PreparedStatement ps = null;
+				ResultSet rs = null;
+				String createPersonQuery = "insert into Invoice (invoiceCode, storeId, customerId, salesPersonId, date) values (?,?,?,?,?);";
+				ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, invoiceCode);
+				ps.setInt(2, storeId);
+				ps.setInt(3, customerId);
+				ps.setInt(4, salesPersonId);
+				ps.setString(5, invoiceDate);
+				ps.executeUpdate();
+				DatabaseInfo.closeConnection(conn, ps, rs);
+			} catch (SQLException e) {
+				System.out.println("SQLException: ");
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			DatabaseLoader.fullInvoices = new ArrayList<>();
 		}
 	}
 
 	/**
-	 * Adds a particular product (identified by <code>itemCode</code>)
-	 * to a particular invoice (identified by <code>invoiceCode</code>) with the
+	 * Adds a particular product (identified by <code>itemCode</code>) to a
+	 * particular invoice (identified by <code>invoiceCode</code>) with the
 	 * specified quantity.
 	 *
 	 * @param invoiceCode
@@ -393,35 +532,242 @@ public class InvoiceData {
 	 * @param quantity
 	 */
 	public static void addProductToInvoice(String invoiceCode, String itemCode, int quantity) {
-    //TODO: implement
+		if (invoiceCode == null || itemCode == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Integer invoiceItemId = -1;
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
+		Integer invoiceId = Invoice.getInvoice(invoiceCode);
+		if (invoiceId == -1) {
+			throw new IllegalArgumentException("Invoice does not exist.");
+		}
+
+		Integer itemId = Product.getProduct(itemCode);
+		if (itemId == -1) {
+			throw new IllegalArgumentException("Item does not exist.");
+		}
+
+		try {
+			String query0 = "Select invoiceItemsId from InvoiceItems \r\n"
+					+ "join Item on Item.itemId = InvoiceItems.itemId\r\n"
+					+ "join Invoice on Invoice.invoiceId = InvoiceItems.InvoiceId\r\n"
+					+ "WHERE Item.itemCode = ? and Invoice.invoiceCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, itemCode);
+			ps.setString(2, invoiceCode);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				invoiceItemId = rs.getInt("invoiceItemsId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		if (invoiceItemId == -1) {
+			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
+
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setInt(1, invoiceId);
+				ps.setInt(2, itemId);
+				ps.setString(3, null);
+				ps.setString(4, null);
+				ps.setDouble(5, quantity);
+				ps.setString(6, null);
+				ps.setString(7, null);
+				ps.setString(8, null);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			// if product is already there, add more quantity
+			double currentQuantity = 0.0;
+			String query0 = "Select quantity from InvoiceItems WHERE invoiceId = ? and itemId = ?;";
+			try {
+				
+				ps = null;
+				ps = conn.prepareStatement(query0);
+
+				ps.setInt(1, invoiceId);
+				ps.setInt(2, itemId);
+
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					currentQuantity = rs.getInt("quantity");
+				}
+			} catch (SQLException e1) {
+
+				e1.printStackTrace();
+			}
+
+			String query = "update InvoiceItems Set quantity = ? Where invoiceId = ? and itemId = ?;";
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setDouble(1, currentQuantity + quantity);
+				ps.setInt(2, invoiceId);
+				ps.setInt(3, itemId);
+
+				ps.executeUpdate();
+
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		DatabaseLoader.fullInvoiceItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 	}
 
 	/**
-	 * Adds a particular equipment <i>purchase</i> (identified by <code>itemCode</code>) to a
-	 * particular invoice (identified by <code>invoiceCode</code>) at the given <code>purchasePrice</code>.
+	 * Adds a particular equipment <i>purchase</i> (identified by
+	 * <code>itemCode</code>) to a particular invoice (identified by
+	 * <code>invoiceCode</code>) at the given <code>purchasePrice</code>.
 	 *
 	 * @param invoiceCode
 	 * @param itemCode
 	 * @param purchasePrice
 	 */
 	public static void addEquipmentToInvoice(String invoiceCode, String itemCode, double purchasePrice) {
-    //TODO: implement
+		if (invoiceCode == null || itemCode == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Integer invoiceItemId = -1;
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
+		Integer invoiceId = Invoice.getInvoice(invoiceCode);
+		if (invoiceId == -1) {
+			throw new IllegalArgumentException("Invoice does not exist.");
+		}
+
+		Integer itemId = Equipment.getEquippment(itemCode);
+		if (itemId == -1) {
+			throw new IllegalArgumentException("Item does not exist.");
+		}
+
+		try {
+			String query0 = "Select invoiceItemsId from InvoiceItems \r\n"
+					+ "join Item on Item.itemId = InvoiceItems.itemId\r\n"
+					+ "join Invoice on Invoice.invoiceId = InvoiceItems.InvoiceId\r\n"
+					+ "WHERE Item.itemCode = ? and Invoice.invoiceCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, itemCode);
+			ps.setString(2, invoiceCode);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				invoiceItemId = rs.getInt("invoiceItemsId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		if (invoiceItemId == -1) {
+			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
+
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setInt(1, invoiceId);
+				ps.setInt(2, itemId);
+				ps.setString(3, "P");
+				ps.setDouble(4, purchasePrice);
+				ps.setString(5, null);
+				ps.setString(6, null);
+				ps.setString(7, null);
+				ps.setString(8, null);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		DatabaseLoader.fullInvoiceItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 	}
 
 	/**
-	 * Adds a particular equipment <i>lease</i> (identified by <code>itemCode</code>) to a
-	 * particular invoice (identified by <code>invoiceCode</code>) with the given 30-day
-	 * <code>periodFee</code> and <code>beginDate/endDate</code>.
+	 * Adds a particular equipment <i>lease</i> (identified by
+	 * <code>itemCode</code>) to a particular invoice (identified by
+	 * <code>invoiceCode</code>) with the given 30-day <code>periodFee</code> and
+	 * <code>beginDate/endDate</code>.
 	 *
 	 * @param invoiceCode
 	 * @param itemCode
 	 * @param amount
 	 */
-	public static void addEquipmentToInvoice(String invoiceCode, String itemCode, double periodFee, String beginDate, String endDate) {
-    //TODO: implement
+	public static void addEquipmentToInvoice(String invoiceCode, String itemCode, double periodFee, String beginDate,
+			String endDate) {
+		if (invoiceCode == null || itemCode == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Integer invoiceItemId = -1;
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
+		Integer invoiceId = Invoice.getInvoice(invoiceCode);
+		if (invoiceId == -1) {
+			throw new IllegalArgumentException("Invoice does not exist.");
+		}
+
+		Integer itemId = Equipment.getEquippment(itemCode);
+		if (itemId == -1) {
+			throw new IllegalArgumentException("Item does not exist.");
+		}
+
+		try {
+			String query0 = "Select invoiceItemsId from InvoiceItems \r\n"
+					+ "join Item on Item.itemId = InvoiceItems.itemId\r\n"
+					+ "join Invoice on Invoice.invoiceId = InvoiceItems.InvoiceId\r\n"
+					+ "WHERE Item.itemCode = ? and Invoice.invoiceCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, itemCode);
+			ps.setString(2, invoiceCode);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				invoiceItemId = rs.getInt("invoiceItemsId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		if (invoiceItemId == -1) {
+			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
+
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setInt(1, invoiceId);
+				ps.setInt(2, itemId);
+				ps.setString(3, "L");
+				ps.setDouble(4, periodFee);
+				ps.setString(5, null);
+				ps.setString(6, null);
+				ps.setString(7, beginDate);
+				ps.setString(8, endDate);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		DatabaseLoader.fullInvoiceItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -434,21 +780,85 @@ public class InvoiceData {
 	 * @param billedHours
 	 */
 	public static void addServiceToInvoice(String invoiceCode, String itemCode, double billedHours) {
-    //TODO: implement
+		if (invoiceCode == null || itemCode == null) {
+			throw new IllegalArgumentException("Invalid arugment");
+		}
+		Integer invoiceItemId = -1;
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		Integer invoiceId = Invoice.getInvoice(invoiceCode);
+		if (invoiceId == -1) {
+			throw new IllegalArgumentException("Invoice does not exist.");
+		}
+
+		Integer itemId = Service.getService(itemCode);
+		if (itemId == -1) {
+			throw new IllegalArgumentException("Item does not exist.");
+		}
+
+		try {
+			String query0 = "Select invoiceItemsId from InvoiceItems \r\n"
+					+ "join Item on Item.itemId = InvoiceItems.itemId\r\n"
+					+ "join Invoice on Invoice.invoiceId = InvoiceItems.InvoiceId\r\n"
+					+ "WHERE Item.itemCode = ? and Invoice.invoiceCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, itemCode);
+			ps.setString(2, invoiceCode);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				invoiceItemId = rs.getInt("invoiceItemsId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		if (invoiceItemId == -1) {
+			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
+
+			try {
+				ps = null;
+				ps = conn.prepareStatement(query);
+
+				ps.setInt(1, invoiceId);
+				ps.setInt(2, itemId);
+				ps.setString(3, null);
+				ps.setString(4, null);
+				ps.setString(5, null);
+				ps.setDouble(6, billedHours);
+				ps.setString(7, null);
+				ps.setString(8, null);
+
+				ps.executeUpdate();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		DatabaseLoader.fullInvoiceItems = new ArrayList<>();
+		DatabaseInfo.closeConnection(conn, ps, rs);
 
 	}
 
 	public static void main(String[] args) {
+//		clearDatabase();
+		
+		addProduct("thormp0", "Thomper", "Tool", 1000.0);
+		addEquipment("equil0", "Gargoyle statue,", "Super scary XL");
+		addEquipment("kwg59x", "Chuck E cheese suit", "The Good looking one");
+		addService("lo0p43", "Shave you bald", 0.5);
 		addPerson("aart0g", "Aaron", "Perkey", "Darth Vader Rd.", "coruscant", "NE", "CT7656", "US");
-		DatabaseLoader.loadPersons();
 		addEmail("aart0g", "captinrex@empiresucks.com");
-		DatabaseLoader.loadPersons();
 		addStore("3179aa", "aart0g", "Andermatt Rd.", "coruscant", "NE", "555555", "US");
-		DatabaseLoader.loadStore();
 		addInvoice("INV006", "3179aa", "aart0g", "89a8a1", "2030-04-04");
-		DatabaseLoader.loadInvoice();
-		System.out.println(DatabaseLoader.fullInvoices);
-
+		
+		addProductToInvoice("INV006", "thormp0", 9);
+		addEquipmentToInvoice("INV006", "equil0", 500.50);
+		addEquipmentToInvoice("INV006", "kwg59x", 100, "2023-05-26", "2023-09-09");
+		addServiceToInvoice("INV006", "lo0p43", 0.1);
+		
+		addEquipmentToInvoice("INV004", "0ec6e9", 2000.0);
 	}
 
 }

@@ -21,19 +21,19 @@ public class Address {
 		this.county = county;
 	}
 	
-	//for sql
-	public Address(Integer addressId, String street, String city, String state, String zip, String county) {
-		this.addressId = addressId;
-		this.street = street;
-		this.city = city;
-		this.county = county;
-		this.state = state;
-		this.zip = zip;
-	}
-	
-	public Integer getAddressId() {
-		return addressId;
-	}
+	// change to this
+public Address(Integer addressId, String street, String city, String state, String zip, String county) {
+	this.addressId = addressId;
+	this.street = street;
+	this.city = city;
+	this.county = county;
+	this.state = state;
+	this.zip = zip;
+}
+
+public Integer getAddressId() {
+	return addressId;
+}
 
 
 	public String getStreet() {
@@ -44,6 +44,8 @@ public class Address {
 	public String getCity() {
 		return city;
 	}
+
+
 
 	public String getState() {
 		return state;

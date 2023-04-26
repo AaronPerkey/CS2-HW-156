@@ -1,5 +1,10 @@
 package com.fmt;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * 
  * Models a product
@@ -58,6 +63,33 @@ public class Product extends Item{
 	public Double getTaxRate() {
 		double taxRate =  0.0345;
 		return taxRate;		
+	}
+	
+	/**
+	 * A method to get a product based on its code
+	 * @param code
+	 * @return Integer
+	 */
+	public static Integer getProduct(String code) {
+		Integer itemId = -1;
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String query0 = "SELECT itemId, itemCode, name, unit, price FROM Item WHERE typeOfSale = ? and itemCode = ?;";
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, "P");
+			ps.setString(2, code);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				itemId = rs.getInt("itemId");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return itemId;
 	}
 	
 	public String toString() {

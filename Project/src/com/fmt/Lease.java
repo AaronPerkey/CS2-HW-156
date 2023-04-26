@@ -29,6 +29,10 @@ public class Lease extends Equipment{
 	}
 	
 	public Double getFee() {
+		return this.fee;
+	}
+	
+	public Double getCost() {
 		int daysBetween = (int) (this.getStartDate().until(this.getEndDate(), ChronoUnit.DAYS));
 		double subtotal = fee * (daysBetween/30.0);
 		return subtotal;
@@ -72,7 +76,7 @@ public class Lease extends Equipment{
 		
 		string.append("   (" + type + ") " + product + "-" + model);
 		
-		Double leaseCost = (this.getFee());
+		Double leaseCost = (this.getCost());
 	
 		string.append(String.format(
 				"\n     %d days (%s -> %s) @ $%6f / 30 days\n"
