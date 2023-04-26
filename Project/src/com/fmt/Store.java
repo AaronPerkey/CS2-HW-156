@@ -1,5 +1,9 @@
 package com.fmt;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -58,6 +62,29 @@ public class Store {
 	
 	public List<Invoice> getInvoiceList() {
 		return invoiceList;
+	}
+	
+	public static Integer getStore(String storeCode) {
+		
+		Integer storeId = -1;
+		
+		try {
+			Connection conn = DatabaseInfo.openConnectSQL();
+			String query0 = "select storeId from Store where storeCode = ?;";
+			PreparedStatement ps0 = null;
+			ps0 = conn.prepareStatement(query0);
+			ps0.setString(1, storeCode);
+			ResultSet rs0 = ps0.executeQuery();
+			if(rs0.next()) {
+				storeId = rs0.getInt("storeId");
+			}
+			DatabaseInfo.closeConnection(conn, ps0, rs0);
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return storeId;
 	}
 	
 	public String toString () {

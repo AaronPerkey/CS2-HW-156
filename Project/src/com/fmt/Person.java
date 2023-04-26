@@ -1,5 +1,9 @@
 package com.fmt;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -27,7 +31,7 @@ public class Person {
 		this.emails = email;
 	}
 	
-	// for adding a person to sql
+	//parseing person from sql
 	public Person(Integer personId, String personCode, String firstName, String lastName, Address address,
 			List<String> emails) {
 		this.personId = personId;
@@ -35,6 +39,24 @@ public class Person {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
+		this.emails = emails;
+	}
+	
+	public Person(Integer personId, String personCode, String firstName, String lastName, Address address) {
+		this.personId = personId;
+		this.personCode = personCode;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+	}
+	
+	//TODO CHANGED CODE
+	public Person(Person person, List<String> emails) {
+		this.personId = person.getPersonId();
+		this.personCode = person.getPersonCode();
+		this.firstName = person.getFirstName();
+		this.lastName = person.getLastName();
+		this.address = person.getAddress();
 		this.emails = emails;
 	}
 
@@ -74,12 +96,50 @@ public class Person {
 		this.emails.add(email);
 	}
 	
+	public static Person getPerson(Integer personId) {
+		
+		List<Person> persons = DatabaseLoader.loadPersons();
+		Person person = null;
+		for (Person dude : persons) {
+			if (dude.getPersonId().equals(personId)) {
+				person = dude;
+			}
+		}
+		return person;
+	}
+	
+	public static Integer getPerson(String personCode) {
+		
+		int personId = -1;
+		
+		try {
+			Connection conn = DatabaseInfo.openConnectSQL();
+			String query0 = "select personId from Person where personCode = ?;";
+			PreparedStatement ps0 = null;
+			ps0 = conn.prepareStatement(query0);
+			ps0.setString(1, personCode);
+			ResultSet rs0 = ps0.executeQuery();
+			if(rs0.next()) {
+				personId = rs0.getInt("personId");
+			}
+			DatabaseInfo.closeConnection(conn, ps0, rs0);
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return personId;
+	}
+	
 	public String toString() {
 		StringBuilder string = new StringBuilder();
 		String customer = this.getFullName();
 		String customerCode = this.getPersonCode();
 
-		int len = this.getEmail().size();
+		int len = 0;
+		if (this.getEmail() != null) {
+			len = this.getEmail().size();
+		}
 		
 		string.append(customer + "(" + customerCode + " : ");
 		for (int j = 0; j < len; j++) {

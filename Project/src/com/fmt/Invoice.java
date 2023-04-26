@@ -1,5 +1,9 @@
 package com.fmt;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -79,6 +83,29 @@ public class Invoice {
 	public String getDate() {
 		return date;
 	}
+	
+	public static Integer getInvoice(String invoiceCode) {
+		
+		Integer invoiceId = -1;
+		
+		try {
+			Connection conn = DatabaseInfo.openConnectSQL();
+			String query0 = "select invoiceId from Invoice where invoiceCode = ?;";
+			PreparedStatement ps0 = null;
+			ps0 = conn.prepareStatement(query0);
+			ps0.setString(1, invoiceCode);
+			ResultSet rs0 = ps0.executeQuery();
+			if(rs0.next()) {
+				invoiceId = rs0.getInt("invoiceId");
+			}
+			DatabaseInfo.closeConnection(conn, ps0, rs0);
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return invoiceId;
+	}
 
 public Double getInvoiceTotal() {
 	if (this.getItemList().size() > 0) {
@@ -145,7 +172,6 @@ public Double getTax() {
 
 public String toString () {
 	StringBuilder string = new StringBuilder();
-	//
 	
 	String invoiceCode = this.getInvoiceCode();
 	string.append("\nInvoice  #" + invoiceCode);

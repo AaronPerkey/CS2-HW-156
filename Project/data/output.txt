@@ -2,11 +2,11 @@
 | Summary Report - By Total                                                              |
 +----------------------------------------------------------------------------------------+
 Invoice #  Store             Customer                Num Items          Tax       Total
-INV001       null     Leaming, Frants                5        $     31477.50 $  544824.17 
-INV002       null     Moonbeam, Denny                4        $       553.21 $   10597.81 
-INV003       null      Antoshin, Rice                4        $      5112.21 $  263346.96 
-INV004       null      Pottie, Portia                4        $      2734.30 $   63255.20 
-INV005       null          Kyle, Gann                0        $         0.00 $       0.00 
+INV001     3c0234     Leaming, Frants                5        $     31477.50 $  544824.17 
+INV002     3c0234     Moonbeam, Denny                4        $       553.21 $   10597.81 
+INV003     9f352c      Antoshin, Rice                4        $      5112.21 $  263346.96 
+INV004     9f352c      Pottie, Portia                4        $      2734.30 $   63255.20 
+INV005     13568h          Kyle, Gann                0        $         0.00 $       0.00 
 +----------------------------------------------------------------------------------------+
                                                      17       $    39877.22  $  882024.14
 +----------------------------------------------------------------+
@@ -23,17 +23,17 @@ Store               Manager               # Sales    Grand Total
                                          25         $  5017928.42
 
 Invoice  #INV001
-Store    #null
+Store    #3c0234
 Date     2666-01-33
 Customer:
 Leaming, Frants(48b5dc : fleaming4@elpais.com, fleaming4@unblog.fr, fleaming4@hugedomains.com)
 7 Sunbrook Center, 
-Young America, MN, 55551, US
+Young America, 55551, MN, US
 
 Salesperson:
 Kyle, Gann(fdc267 : squarry0@reverbnation.com, squarry0@salon.com)
 601 Lotheville Road, 
-Savannah, GA, 31405, US
+Savannah, 31405, GA, US
 
 Item                                                               Total
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-                          -=-=-=-=-=-
@@ -57,17 +57,17 @@ n43k2l3     (Service)  Plowing
 
 
 Invoice  #INV002
-Store    #null
+Store    #3c0234
 Date     4027-01-11
 Customer:
 Moonbeam, Denny(f22d0b : dwitherbed8@umich.edu, dwitherbed8@pbs.org, dwitherbed8@privacy.gov.au)
 40 Aberg Avenue, 
-Fresno, CA, 93786, US
+Fresno, 93786, CA, US
 
 Salesperson:
 Gerry, Nonnah(0375b6 : nmichelotti1@sbwire.com, nmichelotti1@vistaprint.com, nmichelotti1@gravatar.com, nmichelotti1@patch.com)
 0 Havey Avenue, 
-Cleveland, OH, 44177, US
+Cleveland, 44177, OH, US
 
 Item                                                               Total
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-                          -=-=-=-=-=-
@@ -88,17 +88,17 @@ Item                                                               Total
 
 
 Invoice  #INV003
-Store    #null
+Store    #9f352c
 Date     5572-05-01
 Customer:
 Antoshin, Rice(99cdc9 : rantoshina@cam.ac.uk, rantoshina@amazonaws.com, rantoshina@economist.com,, rantoshina@sfgate.com)
 3 5th Junction, 
-Fort Collins, CO, 80525, US
+Fort Collins, 80525, CO, US
 
 Salesperson:
 John, Arbuckle(aa887a : wleavold2@npr.org, wleavold2@craigslist.org)
 65337 Straubel Place, 
-Muncie, IN, 47306, US
+Muncie, 47306, IN, US
 
 Item                                                               Total
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-                          -=-=-=-=-=-
@@ -119,17 +119,17 @@ n3453js     (Product)  Fertilizer
 
 
 Invoice  #INV004
-Store    #null
+Store    #9f352c
 Date     6047-01-30
 Customer:
 Pottie, Portia(89a8a1 : )
 427 Nevada Pass, 
-Toledo, OH, 43656, US
+Toledo, 43656, OH, US
 
 Salesperson:
 John, Hilbert(cefa4f : zcullington3@engadget.com, zcullington3@wisc.edu, zcullington3@google.es, zcullington3@google.pl)
 81 Northport Avenue, 
-Mobile, AL, 36628, US
+Mobile, 36628, AL, US
 
 Item                                                               Total
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-                          -=-=-=-=-=-
@@ -151,17 +151,17 @@ im329op     (Service)  Extermination
 
 
 Invoice  #INV005
-Store    #null
+Store    #13568h
 Date     2023-03-10
 Customer:
 Kyle, Gann(fdc267 : squarry0@reverbnation.com, squarry0@salon.com)
 601 Lotheville Road, 
-Savannah, GA, 31405, US
+Savannah, 31405, GA, US
 
 Salesperson:
 Soloway, Keslie(d78da4 : ksoloway9@amazon.co.uk, ksoloway9@sitemeter.com, ksoloway9@cmu.edu, ksoloway9@unicef.org)
 5595 Saint Paul Place, 
-Annapolis, MD, 21405, US
+Annapolis, 21405, MD, US
 
 Item                                                               Total
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-                          -=-=-=-=-=-

@@ -20,11 +20,11 @@ import org.apache.logging.log4j.Logger;
 
 public class DatabaseLoader {
 	
-	private static List<Person> fullPerson = new ArrayList<>();
-	private static List<Store> fullStore = new ArrayList<>();
-	private static List<Invoice> fullInvoices = new ArrayList<>();
-	private static List<Item> fullItems = new ArrayList<>();
-	private static List<Item> fullInvoiceItems = new ArrayList<>();
+	public static List<Person> fullPerson = new ArrayList<>();
+	public static List<Store> fullStore = new ArrayList<>();
+	public static List<Invoice> fullInvoices = new ArrayList<>();
+	public static List<Item> fullItems = new ArrayList<>();
+	public static List<Item> fullInvoiceItems = new ArrayList<>();
 	
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseInfo.class);
 	/**
@@ -44,7 +44,7 @@ public class DatabaseLoader {
 		ResultSet rs = null;
 		String personQuery = """
 				Select Person.personId, Person.personCode, Person.lastName, Person.firstName,
-					Address.addressId, Address.street, Address.city, Address.zipCode, State.state,
+					Address.addressId, Address.street, Address.city, Address.zip, State.state,
 					Country.country from Person
 					join Address on Address.addressId = Person.addressId
 					join State on State.stateId = Address.stateId
@@ -63,7 +63,7 @@ public class DatabaseLoader {
 				Integer addressId = rs.getInt("addressId");
 				String street = rs.getString("Address.street");
 				String city = rs.getString("Address.city");
-				String zipCode = rs.getString("Address.zipCode");
+				String zip = rs.getString("Address.zip");
 				String state = rs.getString("State.state");
 				String country = rs.getString("Country.country");
 
@@ -80,7 +80,7 @@ public class DatabaseLoader {
 				}
 				rsj.close();
 				psj.close();
-				Address a = new Address(addressId, street, city, zipCode, state, country);
+				Address a = new Address(addressId, street, city, zip, state, country);
 				e = new Person(personId, personCode, firstName, lastName, a, email);
 				fullPerson.add(e);
 			}
@@ -179,18 +179,6 @@ public class DatabaseLoader {
   		return fullItems;
   	}
 
-	public static Person getPerson(int personId) {
-		
-		List<Person> persons = loadPersons();
-		Person person = null;
-		for (Person dude : persons) {
-			if (dude.getPersonId().equals(personId)) {
-				person = dude;
-			}
-		}
-		return person;
-	}
-
 	/**
 	 * Loads a Store from the sql database
 	 * 
@@ -209,7 +197,7 @@ public class DatabaseLoader {
 		ResultSet rs = null;
 		String storeQuery = """
 				select Store.storeId, Store.storeCode, Store.managerId, Address.addressId, 
-					Address.street, Address.city, Address.zipCode, State.state, 
+					Address.street, Address.city, Address.zip, State.state, 
 					Country.country from Store
 					join Address on Address.addressId = Store.addressId
 					join State on State.stateId = Address.stateId
@@ -227,11 +215,11 @@ public class DatabaseLoader {
 				Integer addressId = rs.getInt("Address.addressId");
 				String street = rs.getString("Address.street");
 				String city = rs.getString("Address.city");
-				String zipCode = rs.getString("Address.zipCode");
+				String zip = rs.getString("Address.zip");
 				String state = rs.getString("State.state");
 				String country = rs.getString("Country.country");
-				perosnConnection = getPerson(managerId);
-				Address a = new Address(addressId, street, city, zipCode, state, country);
+				perosnConnection = Person.getPerson(managerId);
+				Address a = new Address(addressId, street, city, zip, state, country);
 				Store s = new Store(storeId, storeCode, perosnConnection, a);
 				Store completeStore = getStoreInvoices(s);
 				fullStore.add(completeStore);
@@ -298,8 +286,8 @@ public class DatabaseLoader {
 				String storeCode = rs.getString("storeCode");
 				int salespersonId = rs.getInt("salesPersonId");
 				String datePurchased = rs.getString("date");
-				customerConnection = getPerson(customerId);
-				salesPerosnConnection = getPerson(salespersonId);
+				customerConnection = Person.getPerson(customerId);
+				salesPerosnConnection = Person.getPerson(salespersonId);
 
 				Invoice i = new Invoice(invoiceId, invoiceCode, storeCode, customerConnection, salesPerosnConnection, datePurchased);
 				Invoice completeInvoice = getListInvoiceItems(i);
