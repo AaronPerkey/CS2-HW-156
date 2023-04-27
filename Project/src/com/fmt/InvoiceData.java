@@ -840,25 +840,4 @@ public class InvoiceData {
 		DatabaseInfo.closeConnection(conn, ps, rs);
 
 	}
-
-	public static void main(String[] args) {
-//		clearDatabase();
-		
-		addProduct("thormp0", "Thomper", "Tool", 1000.0);
-		addEquipment("equil0", "Gargoyle statue,", "Super scary XL");
-		addEquipment("kwg59x", "Chuck E cheese suit", "The Good looking one");
-		addService("lo0p43", "Shave you bald", 0.5);
-		addPerson("aart0g", "Aaron", "Perkey", "Darth Vader Rd.", "coruscant", "NE", "CT7656", "US");
-		addEmail("aart0g", "captinrex@empiresucks.com");
-		addStore("3179aa", "aart0g", "Andermatt Rd.", "coruscant", "NE", "555555", "US");
-		addInvoice("INV006", "3179aa", "aart0g", "89a8a1", "2030-04-04");
-		
-		addProductToInvoice("INV006", "thormp0", 9);
-		addEquipmentToInvoice("INV006", "equil0", 500.50);
-		addEquipmentToInvoice("INV006", "kwg59x", 100, "2023-05-26", "2023-09-09");
-		addServiceToInvoice("INV006", "lo0p43", 0.1);
-		
-		addEquipmentToInvoice("INV004", "0ec6e9", 2000.0);
-	}
-
 }

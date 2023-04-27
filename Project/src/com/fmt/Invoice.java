@@ -120,15 +120,9 @@ public Double getInvoiceTotal() {
 		for (int j = 0; j < numItems; j++) {
 			// Service
 			serviceCost += (this.getItemList().get(j).getCost());
-			sumTax += (serviceCost * this.getItemList().get(j).getTaxRate());
+			
+			sumTax += ((this.getItemList().get(j).getCost()) * this.getItemList().get(j).getTaxRate());
 
-			leaseCost += this.getItemList().get(j).getFee();
-
-			if (leaseCost > 10000 && leaseCost < 100000.0) {
-				sumTax += 500.0;
-			} else if (leaseCost > 100000) {
-				sumTax += 1500.0;
-			}
 		}
 
 		total += serviceCost + productCost + purchaseCost + leaseCost + sumTax;
@@ -146,18 +140,13 @@ public Double getCostWithNoTax() {
 		int numItems = this.getItemList().size();
 		Double total = 0.0;
 		Double costs = 0.0;
-		Double productCost = 0.0;
-		Double purchaseCost = 0.0;
-		Double leaseCost = 0.0;
 
 		for (int j = 0; j < numItems; j++) {
 			// Service
 			costs += (this.getItemList().get(j).getCost());
-
-			leaseCost += (this.getItemList().get(j).getFee());
 		}
 
-		total = costs + productCost + purchaseCost + leaseCost;
+		total = costs;
 		total = ((Math.round(total * 100.0)) / 100.0);
 		return total;
 

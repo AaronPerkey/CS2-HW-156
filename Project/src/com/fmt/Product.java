@@ -61,7 +61,7 @@ public class Product extends Item{
 	
 	@Override
 	public Double getTaxRate() {
-		double taxRate =  0.0345;
+		double taxRate =  0.0715;
 		return taxRate;		
 	}
 	
@@ -102,8 +102,8 @@ public class Product extends Item{
 		Double productCost = this.getCost();
 		
 		string.append(String.format(
-				"\n                       Quantity: %d                         $%10.2f \n",
-				this.getQuantity(),productCost));
+				"\n                        %d @ %f                         $%10.2f \n",
+				this.getQuantity(),this.getUnitPrice(),productCost));
 		
 		return string.toString();
 	}

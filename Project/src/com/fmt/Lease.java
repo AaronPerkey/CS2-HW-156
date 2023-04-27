@@ -41,14 +41,14 @@ public class Lease extends Equipment{
 	@Override
 	public Double getTaxRate() {
 		double tax = 0.00;
-		if(this.fee < 10000) {
+		if(this.getCost() < 10000) {
 			tax = 0.00;
-		}else if((this.fee >= 10000) || (fee < 100000)) {
+		}else if((this.getCost() >= 10000) || (this.getCost() < 100000)) {
 			tax = 500.00;
-		}else if(this.fee >= 100000) {
+		}else if(this.getCost() >= 100000) {
 			tax = 1500.00;
 		}
-		return tax;
+		return tax / this.getCost();
 	}
 	
 	public LocalDate getStartDate() {
