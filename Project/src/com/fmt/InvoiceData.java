@@ -32,11 +32,10 @@ public class InvoiceData {
 				Delete From Store;
 				Delete From Invoice;
 				Delete From Item;
-				Delete From InvoiceItem;
+				Delete From InvoiceItems;
 				SET FOREIGN_KEY_CHECKS=1;
 				""";
 		try {
-			ps = null;
 			ps = conn.prepareStatement(query);
 			ps.executeUpdate();
 		} catch (SQLException e1) {
@@ -67,17 +66,18 @@ public class InvoiceData {
 		Integer stateId = -1;
 		Integer addressId = -1;
 
+		Connection conn = DatabaseInfo.openConnectSQL();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			Connection conn = DatabaseInfo.openConnectSQL();
 			String query0 = "select countryId from Country where country = ?;";
-			PreparedStatement ps0 = null;
-			ps0 = conn.prepareStatement(query0);
-			ps0.setString(1, country);
-			ResultSet rs0 = ps0.executeQuery();
-			if (rs0.next()) {
-				countryId = rs0.getInt("countryId");
+			ps = conn.prepareStatement(query0);
+			ps.setString(1, country);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				countryId = rs.getInt("countryId");
 			}
-			DatabaseInfo.closeConnection(conn, ps0, rs0);
+
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
@@ -87,18 +87,17 @@ public class InvoiceData {
 		if (countryId == -1) {
 
 			try {
-				Connection conn = DatabaseInfo.openConnectSQL();
 				String query = "insert into Country (country) values (?);";
-				PreparedStatement ps;
+				ps.close();
+				rs = null;
 				ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, country);
 				ps.executeUpdate();
 				// get the generated keys:
-				ResultSet keys = ps.getGeneratedKeys();
-				keys.next();
-				int key = keys.getInt(1);
+				rs = ps.getGeneratedKeys();
+				rs.next();
+				int key = rs.getInt(1);
 				countryId = key;
-				DatabaseInfo.closeConnection(conn, ps, keys);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
@@ -106,16 +105,15 @@ public class InvoiceData {
 		}
 
 		try {
-			Connection conn = DatabaseInfo.openConnectSQL();
 			String query0 = "select stateId from State where state = ?;";
-			PreparedStatement ps = null;
+			ps.close();
+			rs = null;
 			ps = conn.prepareStatement(query0);
 			ps.setString(1, state);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			if (rs.next()) {
 				stateId = rs.getInt("stateId");
 			}
-			DatabaseInfo.closeConnection(conn, ps, rs);
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
@@ -125,9 +123,9 @@ public class InvoiceData {
 		if (stateId == -1) {
 
 			try {
-				Connection conn = DatabaseInfo.openConnectSQL();
 				String query = "insert into State (state) values (?);";
-				PreparedStatement ps;
+				ps.close();
+				rs = null;
 				ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, state);
 				ps.executeUpdate();
@@ -136,7 +134,6 @@ public class InvoiceData {
 				keys.next();
 				int key = keys.getInt(1);
 				stateId = key;
-				DatabaseInfo.closeConnection(conn, ps, keys);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
@@ -144,9 +141,9 @@ public class InvoiceData {
 		}
 
 		try {
-			Connection conn = DatabaseInfo.openConnectSQL();
-			PreparedStatement ps = null;
 			String createPersonQuery = "insert into Address (street, city, zip, stateId, countryId) values (?,?,?,?,?);";
+			ps.close();
+			rs = null;
 			ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, street);
 			ps.setString(2, city);
@@ -189,7 +186,7 @@ public class InvoiceData {
 			throw new IllegalArgumentException("Invalid person data. (one of the veriables equal null)");
 		}
 
-		Integer personId = Person.getPerson(personCode);
+		Integer personId = Person.getPersonId(personCode);
 
 		if (personId == -1) {
 
@@ -232,7 +229,7 @@ public class InvoiceData {
 	 */
 	public static void addEmail(String personCode, String email) {
 
-		Integer personId = Person.getPerson(personCode);
+		Integer personId = Person.getPersonId(personCode);
 
 		if (personId == -1) {
 			throw new IllegalArgumentException("This person does not exist in the database.");
@@ -258,7 +255,7 @@ public class InvoiceData {
 		}
 		if (emailId == -1) {
 			try {
-				ps = null;
+				ps.close();
 				rs = null;
 				String createPersonQuery = "insert into Email (personId, address) values (?,?);";
 				ps = conn.prepareStatement(createPersonQuery, Statement.RETURN_GENERATED_KEYS);
@@ -300,7 +297,7 @@ public class InvoiceData {
 
 		if (storeId == -1) {
 
-			Integer managerId = Person.getPerson(managerCode);
+			Integer managerId = Person.getPersonId(managerCode);
 
 			if (managerId == -1) {
 				throw new IllegalArgumentException("Person does not exsist.");
@@ -350,7 +347,6 @@ public class InvoiceData {
 			String query = "insert into Item (itemCode, typeOfSale, name, unit, model, price, hourlyRate) values (?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
 				ps = conn.prepareStatement(query);
 
 				ps.setString(1, code);
@@ -391,7 +387,6 @@ public class InvoiceData {
 			String query = "insert into Item (itemCode, typeOfSale, name, unit, model, price, hourlyRate) values (?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
 				ps = conn.prepareStatement(query);
 
 				ps.setString(1, code);
@@ -447,7 +442,7 @@ public class InvoiceData {
 			String query = "insert into Item (itemCode, typeOfSale, name, unit, model, price, hourlyRate) values (?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query);
 
 				ps.setString(1, code);
@@ -490,8 +485,8 @@ public class InvoiceData {
 		if (invoiceId == -1) {
 
 			Integer storeId = Store.getStore(storeCode);
-			Integer salesPersonId = Person.getPerson(salesPersonCode);
-			Integer customerId = Person.getPerson(customerCode);
+			Integer salesPersonId = Person.getPersonId(salesPersonCode);
+			Integer customerId = Person.getPersonId(customerCode);
 
 			if (storeId == -1) {
 				throw new IllegalArgumentException("Store does not exsist.");
@@ -571,7 +566,7 @@ public class InvoiceData {
 			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query);
 
 				ps.setInt(1, invoiceId);
@@ -593,7 +588,7 @@ public class InvoiceData {
 			String query0 = "Select quantity from InvoiceItems WHERE invoiceId = ? and itemId = ?;";
 			try {
 				
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query0);
 
 				ps.setInt(1, invoiceId);
@@ -610,7 +605,7 @@ public class InvoiceData {
 
 			String query = "update InvoiceItems Set quantity = ? Where invoiceId = ? and itemId = ?;";
 			try {
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query);
 
 				ps.setDouble(1, currentQuantity + quantity);
@@ -677,7 +672,7 @@ public class InvoiceData {
 			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query);
 
 				ps.setInt(1, invoiceId);
@@ -749,7 +744,7 @@ public class InvoiceData {
 			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query);
 
 				ps.setInt(1, invoiceId);
@@ -819,7 +814,7 @@ public class InvoiceData {
 			String query = "insert into InvoiceItems (invoiceId, itemId, typeOfBuy, price, quantity, hoursBilled, startDate, endDate) values (?,?,?,?,?,?,?,?);";
 
 			try {
-				ps = null;
+				ps.close();
 				ps = conn.prepareStatement(query);
 
 				ps.setInt(1, invoiceId);

@@ -45,7 +45,7 @@ public class Product extends Item{
 		return price;
 	}
 	public Double getTax() {
-		return price * 0.075;
+		return price * 0.0715;
 	}
 	
 	@Override

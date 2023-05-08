@@ -5,20 +5,34 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * This is the main driver program that parses the data file and
+ * 
+ * @author Kyle Gann, Aaron Perkey
  *
  */
-public class DataConverter {
 
-	public static List<Item> parseDataFileItem(String file) {
-		List<Item> result = new ArrayList<Item>();
-		File f = new File(file);
+public class DataConverter {
+	
+	public static String FILE_ITEMS = "data/Items.csv";
+	public static String FILE_STORE = "data/Stores.csv";
+	public static String FILE_PERSON = "data/Persons.csv";
+	public static String FILE_INVOICE = "data/Invoices.csv";
+	public static String FILE_INVOICEITEMS = "data/InvoiceItems.csv";
+
+	/**
+	 * Parses items from the CSV data file.
+	 * 
+	 * @return List of Items.
+	 */
+	public static List<Item> parseDataFileItem() {
+		
+		List<Item> fullItemsList = new ArrayList<>();
+		
+		File f = new File(FILE_ITEMS);
 		try (Scanner s = new Scanner(f)) {
 			int size = 0;
 			while (s.hasNext()) {
@@ -28,36 +42,43 @@ public class DataConverter {
 						size = Integer.parseInt(line);
 						line = s.nextLine();
 					}
-					Item e = null;
+					Item it = null;
 					String tokens[] = line.split(",");
-					String code = tokens[0];
+					String itemCode = tokens[0];
 					String name = tokens[2];
 
 					if (tokens[1].equals("E")) {
 						String model = tokens[3];
-						e = new Equipment(code, name, model);
+						it = new Equipment(0, itemCode, name, model);
 					} else if (tokens[1].equals("S")) {
 						double hourlyRate = Double.parseDouble(tokens[3]);
-						e = new Service(code, name, hourlyRate);
+						it = new Service(0, itemCode, name, hourlyRate);
 					} else if (tokens[1].equals("P")) {
 						String unit = tokens[3];
 						double price = Double.parseDouble(tokens[4]);
-						e = new Product(code, name, unit, price);
+						it = new Product(0, itemCode, name, unit, price);
 					}
 
-					result.add(e);
+					fullItemsList.add(it);
 				}
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-		return result;
+		return fullItemsList;
 	}
 
-	public static List<Person> parseDataFilePerson(String file) {
-		List<Person> result = new ArrayList<Person>();
-		File f = new File(file);
+	/**
+	 * Parses people from the CSV data file.
+	 * 
+	 * @return List of people.
+	 */
+	public static List<Person> parseDataFilePerson() {
+		
+		List<Person> fullPersonList = new ArrayList<>();
+		
+		File f = new File(FILE_PERSON);
 		try (Scanner s = new Scanner(f)) {
 			int size = 0;
 			while (s.hasNext()) {
@@ -72,26 +93,39 @@ public class DataConverter {
 					String personCode = tokens[0];
 					String firstName = tokens[1];
 					String lastName = tokens[2];
-					Address address = new Address(tokens[3], tokens[4], tokens[5], tokens[6], tokens[7]);
+					String street = tokens[3];
+					String city = tokens[4];
+					String state = tokens[5];
+					String zipCode = tokens[6];
+					String country = tokens[7];
+					Address address = new Address(street, city, state, zipCode, country);
 					List<String> email = new ArrayList<>();
 					for (int j = 0; j < tokens.length - 8; j++) {
 						email.add(tokens[j + 8]);
 					}
 
 					e = new Person(personCode, firstName, lastName, address, email);
-					result.add(e);
+					fullPersonList.add(e);
+					
 				}
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-		return result;
+		return fullPersonList;
 	}
 
-	public static List<Store> parseDataFileStore(String file) {
-		List<Store> result = new ArrayList<Store>();
-		File f = new File(file);
+	/**
+	 * Parses stores from the CSV data file.
+	 * 
+	 * @return List of stores.
+	 */
+	public static List<Store> parseDataFileStore() {
+		
+		List<Store> fullStoreList = new ArrayList<>();
+		
+		File f = new File(FILE_STORE);
 		try (Scanner s = new Scanner(f)) {
 			int size = 0;
 			while (s.hasNext()) {
@@ -101,150 +135,58 @@ public class DataConverter {
 						size = Integer.parseInt(line);
 						line = s.nextLine();
 					}
-					Store e = null;
+					Store st = null;
 					String tokens[] = line.split(",");
 					String storeCode = tokens[0];
-
-					Address address = new Address(tokens[2], tokens[3], tokens[4], tokens[5], tokens[6]);
-
-					List<Invoice> invoices = parseDataFileInvoice("data/Invoices.csv");
-					Comparator<Invoice> byStore = Comparator.comparing(Invoice::getStore);
-					Collections.sort(invoices, byStore);
-
-					int index = 0;
-					List<Invoice> invoicesList = new ArrayList<Invoice>();
-					while (index > -1) {
-						Invoice key = new Invoice(tokens[0]);
-						index = Collections.binarySearch(invoices, key, byStore);
-						// find an invoice, get its class
-						// add it to the list, remove it from invoice items, search again
-						if (index > -1) {
-							invoicesList.add(invoices.get(index));
-							invoices.remove(index);
-						}
-
-					}
-
-					List<Person> persons = parseDataFilePerson("data/Persons.csv");
-					Comparator<Person> byId = Comparator.comparing(Person::getPersonCode);
-					Collections.sort(persons, byId);
-					Person key = new Person(tokens[1]);
-
-					index = Collections.binarySearch(persons, key, byId);
-					Person managerCode = new Person(tokens[1], persons.get(index).getFirstName(),
-							persons.get(index).getLastName(), persons.get(index).getAddress(),
-							persons.get(index).getEmail());
-
-					e = new Store(storeCode, managerCode, address, invoicesList);
-
-					result.add(e);
+					String personCode = tokens[1];
+					String street = tokens[2];
+					String city = tokens[3];
+					String state = tokens[4];
+					String zipCode = tokens[5];
+					String country = tokens[6];
+					Address address = new Address(street, city, state, zipCode, country);
+					Person managerCode = Person.getPerson(personCode);
+					st = new Store(0, storeCode, managerCode, address);
+					Store completeStore = getStoreInvoices(st);
+					fullStoreList.add(completeStore);
 				}
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-		return result;
+		return fullStoreList;
 	}
 
-	public static List<Invoice> parseDataFileInvoice(String file) {
-		List<Invoice> result = new ArrayList<Invoice>();
-		File f = new File(file);
+	/**
+	 * Parses invoices from the CSV data file.
+	 * 
+	 * @return List of invoices.
+	 */
+	public static List<Invoice> parseDataFileInvoice() {
+		
+		List<Invoice> fullInvoiceList = new ArrayList<>();
+		
+		File f = new File(FILE_INVOICE);
 		try (Scanner s = new Scanner(f)) {
 			int size = 0;
-			
 			while (s.hasNext()) {
-				
 				String line = s.nextLine();
 				if (!line.trim().isEmpty()) {
 					if (size == 0) {
 						size = Integer.parseInt(line);
 						line = s.nextLine();
 					}
-					Invoice e = null;
+					Invoice in = null;
 					String tokens[] = line.split(",");
-					List<Item> invoiceItems = parseDataFileInvoiceItems("data/InvoiceItems.csv");
-
-					
-					String storeCode = tokens[1];
-					// uses the id given by token 2 to binary search in persons database
-					// for all other information about the person
-					List<Person> persons = parseDataFilePerson("data/Persons.csv");
-					Comparator<Person> byId = Comparator.comparing(Person::getPersonCode);
-					Collections.sort(persons, byId);
-					Person key = new Person(tokens[2]);
-					int index = Collections.binarySearch(persons, key, byId);
-					Person customer = new Person(tokens[2], persons.get(index).getFirstName(),
-							persons.get(index).getLastName(), persons.get(index).getAddress(),
-							persons.get(index).getEmail());
-
-					key = new Person(tokens[3]);
-					index = Collections.binarySearch(persons, key, byId);
-					Person salesperson = new Person(tokens[3], persons.get(index).getFirstName(),
-							persons.get(index).getLastName(), persons.get(index).getAddress(),
-							persons.get(index).getEmail());
-					String date = (tokens[4]);
-
-					index = 0;
-					List<Item> invoiceCodes = new ArrayList<Item>();
-					
-					
-					for (int i = 0; i < invoiceItems.size(); i++) {
-						String code = invoiceItems.get(i).getInvoiceCode();
-						if (tokens[0].equals(code)) {
-							index = i;
-						} else {
-							index = -1;
-						}
-						
-					
-						if (index > -1) {
-						// invoice now has a list as its first element, find an invoice, get its class
-						// add it to the list, remove it from invoice items, search again
-							if (invoiceItems.get(index).getClass().getSimpleName().equals("Purchase")) {
-
-								Purchase invoiceCode = new Purchase(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getPrice(), invoiceItems.get(index).getInvoiceCode());
-								
-								invoiceCodes.add(invoiceCode);
-								invoiceItems.remove(index);
-							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Lease")) {
-
-								LocalDate startDate = invoiceItems.get(index).getStartDate();
-								LocalDate endDate = invoiceItems.get(index).getEndDate();
-						        
-								Lease invoiceCode = new Lease(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(), invoiceItems.get(index).getModel(), invoiceItems.get(index).getFee(),
-										startDate, endDate, invoiceItems.get(index).getInvoiceCode());
-								invoiceCodes.add(invoiceCode);
-								invoiceItems.remove(index);
-
-							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Service")) {
-
-								Service invoiceCode1 = new Service(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(),
-										invoiceItems.get(index).getHourlyRate());
-								Service invoiceCode = new Service(invoiceCode1, invoiceItems.get(index).getHoursBilled(), invoiceItems.get(index).getInvoiceCode());
-								
-								invoiceCodes.add(invoiceCode);
-								invoiceItems.remove(index);
-							} else if (invoiceItems.get(index).getClass().getSimpleName().equals("Product")) {
-								
-								Product invoiceCode1 = new Product(invoiceItems.get(index).getItemCode(),
-										invoiceItems.get(index).getName(), invoiceItems.get(index).getUnit(), invoiceItems.get(index).getPrice());
-								Product invoiceCode = new Product(invoiceCode1, invoiceItems.get(index).getQuantity(), invoiceItems.get(index).getInvoiceCode());
-								invoiceCodes.add(invoiceCode);
-								
-								invoiceItems.remove(index);
-							} else {
-								System.out.println(invoiceItems.get(index).getClass().getSimpleName());
-							}
-						}
-						
-					}
-					e = new Invoice(tokens[0], invoiceCodes, storeCode, customer, salesperson, date);
-
-					result.add(e);
+					String invoiceCode = tokens[0]; 
+					String storeCode = tokens[1];   
+					Person customer = Person.getPerson(tokens[2]);  
+					Person salesPerson = Person.getPerson(tokens[3]);
+					LocalDate date = getDate(tokens[4]);
+					in = new Invoice(0, invoiceCode, storeCode, customer, salesPerson, date.toString());
+					Invoice completeInvoice = getListInvoiceItems(in);
+					fullInvoiceList.add(completeInvoice);
 				}
 
 			}
@@ -252,13 +194,32 @@ public class DataConverter {
 			throw new RuntimeException(e);
 		}
 
-		return result;
+		return fullInvoiceList;
 	}
 
-
-	public static List<Item> parseDataFileInvoiceItems(String file) {
-		List<Item> result = new ArrayList<Item>();
-		File f = new File(file);
+	/**
+	 * Parses invoice items from the CSV data file.
+	 * 
+	 * @return List of invoice items.
+	 */
+	public static List<Item> parseDataFileInvoiceItems() {
+		
+		List<Item> fullInvoiceItemsList = new ArrayList<>();
+		Item it = null;
+		Item matchingItem = null;
+		LocalDate startDate = null;
+		LocalDate endDate = null;
+		String typeOfBuy = null;
+		String name = null;
+		String model = null;
+		String unit = null;
+		int quantity = 0;
+		Double cost = 0.00;
+		Double unitPrice = 0.00;
+		Double hourlyRate = 0.00;
+		Double hoursBilled = 0.00;
+		
+		File f = new File(FILE_INVOICEITEMS);
 		try (Scanner s = new Scanner(f)) {
 			int size = 0;
 			while (s.hasNext()) {
@@ -268,94 +229,116 @@ public class DataConverter {
 						size = Integer.parseInt(line);
 						line = s.nextLine();
 					}
-					Item e = null;
 					String tokens[] = line.split(",");
 					String invoiceCode = tokens[0];
 					String itemCode = tokens[1];
-
-					List<Item> items = DataConverter.parseDataFileItem("data/Items.csv");
-					Comparator<Item> byId = Comparator.comparing(Item::getItemCode);
-					Collections.sort(items, byId);
-
-					if (tokens[2].equals("P")) {
-						Equipment key = new Equipment(tokens[1]);
-						int index = Collections.binarySearch(items, key, byId);
-						Equipment item = new Equipment(tokens[1], items.get(index).getName(),
-								items.get(index).getModel());
-						Double price = Double.parseDouble(tokens[3]);
-
-						e = new Purchase(itemCode, item.getName(), item.getModel(), price, tokens[0]);
-					} else if (tokens[2].equals("L")) {
-						Equipment key = new Equipment(tokens[1]);
-						int index = Collections.binarySearch(items, key, byId);
-						Equipment item = new Equipment(tokens[1], items.get(index).getName(),
-								items.get(index).getModel());
-						Double fee = Double.parseDouble(tokens[3]);
-						String startDate = tokens[4];
-						String endDate = tokens[5];
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				        LocalDate startDateLocal = LocalDate.parse(startDate, formatter);
-				        LocalDate endDateLocal = LocalDate.parse(endDate, formatter);
-						e = new Lease(itemCode, item.getName(), item.getModel(), fee, startDateLocal, endDateLocal, tokens[0]);
-					} else {
-						if (tokens[2].contains(".")) {
-							Service key = new Service(tokens[1]);
-							int index = Collections.binarySearch(items, key, byId);
-							Service item = new Service(tokens[1], items.get(index).getName(),
-									items.get(index).getHourlyRate());
-							Double hoursBilled = Double.parseDouble(tokens[2]);
-							Service service = new Service(itemCode, item.getName(), item.getHourlyRate());
-							e = new Service(service, hoursBilled, invoiceCode);
-						} else {
-							Product key = new Product(tokens[1]);
-							int index = Collections.binarySearch(items, key, byId);
-							Product item = new Product(tokens[1], items.get(index).getName(),
-									items.get(index).getUnit(), items.get(index).getPrice());
-							int amount = Integer.parseInt(tokens[2]);
-							String name = item.getName();
-							Product product = new Product(itemCode, name, item.getUnit(), item.getPrice());
-							
-							e = new Product(product, amount, invoiceCode);
+					for(Item item : parseDataFileItem()) {
+						if(item.getItemCode().equals(itemCode)) {
+							matchingItem = item;
 						}
 					}
+					name = matchingItem.getName();
+					model = matchingItem.getModel();
+					unit = matchingItem.getUnit();
+					unitPrice = matchingItem.getUnitPrice();
+					hourlyRate = matchingItem.getHourlyRate();
+					if(matchingItem instanceof Equipment) {
+						typeOfBuy = tokens[2];
+						cost = Double.parseDouble(tokens[3]);
+						if(typeOfBuy.equals("P")) {
+							it = new Purchase(0, itemCode, name, model, cost, invoiceCode);
+						} else if(typeOfBuy.equals("L")) {
+							startDate = getDate(tokens[4]);
+							endDate = getDate(tokens[5]);
+							it = new Lease(0, itemCode, name, model, cost, startDate, endDate, invoiceCode);
+						}
+					} else if(matchingItem instanceof Product) {
+						quantity = Integer.parseInt(tokens[2]);
+						Product p = new Product(0, itemCode, name, unit, unitPrice);
+						it = new Product(p, quantity, invoiceCode);
+					} else if(matchingItem instanceof Service) {
+						hoursBilled = Double.parseDouble(tokens[2]);
+						Service sv = new Service(0, itemCode, name, hourlyRate);
+						it = new Service(sv, hoursBilled, invoiceCode);
+					}
 
-					result.add(e);
+					fullInvoiceItemsList.add(it);
 				}
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-		return result;
+		return fullInvoiceItemsList;
 	}
 
+	public static LocalDate getDate(String dateString) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(dateString, formatter);
+		return date;
+	}
+	
+	/**
+	 * Connects invoices with there corresponding store.
+	 * 
+	 * @return List of invoices of a certain store.
+	 */
+	public static Store getStoreInvoices(Store store) {
+		
+		List<Invoice> invoiceList = new ArrayList<>();
+
+		for (Invoice invoice : parseDataFileInvoice()) {
+			if (invoice.getStoreCode().equals(store.getStoreCode())) {
+				invoiceList.add(invoice);
+			}
+		}
+		Store s = new Store(store, invoiceList);
+		return s;
+	}
+	
+	/**
+	 * Connects items with there corresponding invoice
+	 * 
+	 * @return List of items of a certain invoice
+	 */
+	public static Invoice getListInvoiceItems(Invoice invoice) {
+		
+		List<Item> itemList = new ArrayList<>();
+
+		for(Item thing : parseDataFileInvoiceItems()) {
+			if(thing.getInvoiceCode().equals(invoice.getInvoiceCode())) {
+				itemList.add(thing);
+			}
+		}
+		Invoice in = new Invoice(invoice, itemList);
+		return in;
+	}
+	
 	public static void main(String args[]) {
-
-		List<Item> items = parseDataFileItem("data/Items.csv");
-		List<Person> persons = parseDataFilePerson("data/Persons.csv");
-		List<Store> stores = parseDataFileStore("data/Stores.csv");
+		
+		parseDataFileItem();
+		parseDataFilePerson();
+		parseDataFileStore();
+		parseDataFileInvoice();
+		parseDataFileInvoiceItems();
+		
 		try {
-			JsonLoader.writeJSONItems(items, "data/Items.json");
+			JsonLoader.writeJSONItems(parseDataFileItem(), "data/Items.json");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
 		try {
-			JsonLoader.writeJSONPerson(persons, "data/Persons.json");
+			JsonLoader.writeJSONPerson(parseDataFilePerson(), "data/Persons.json");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
 		try {
-			JsonLoader.writeJSONStore(stores, "data/Stores.json");
+			JsonLoader.writeJSONStore(parseDataFileStore(), "data/Stores.json");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		List<Person> Persons2 = parseDataFilePerson("data/personTestCase.csv");
-		try {
-			JsonLoader.writeJSONPerson(Persons2, "src/com/fmt/PersonsTest.json");
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+
 	}
 }

@@ -59,7 +59,7 @@ public class Person {
 	}
 
 	public String getFullName() {
-		return firstName + ", " + lastName;
+		return lastName + ", " + firstName;
 	}
 
 	public Address getAddress() {
@@ -69,8 +69,20 @@ public class Person {
 	public List<String> getEmail() {
 		return emails;
 	}
+	
+public static Person getPerson(String personCode) {
+		
+		Person person = null;
+		
+		for (Person dude : DataConverter.parseDataFilePerson()) {
+			if (dude.getPersonCode().equals(personCode)) {
+				person = dude;
+			}
+		}
+		return person;
+	}
 
-	public static Integer getPerson(String personCode) {
+	public static Integer getPersonId(String personCode) {
 
 		int personId = -1;
 
